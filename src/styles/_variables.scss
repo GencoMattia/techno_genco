@@ -1,0 +1,27 @@
+// ================================
+// Palette Tecnica & Industriale
+// ================================
+
+// Tema Chiaro
+$color-primary-light: #2F4B6E;   // Blu acciaio
+$color-secondary-light: #3C3C3C; // Grigio scuro per testi
+$color-neutral-light: #E5E5E5;   // Grigio chiaro per sfondi
+$color-accent-light: #F7931E;    // Arancione tecnico (CTA, pulsanti)
+$color-background-light: #FFFFFF;// Sfondo principale
+
+// Tema Scuro
+$color-primary-dark: #2F4B6E;    // Blu acciaio (coerente tra i due temi)
+$color-secondary-dark: #E5E5E5;  // Grigio chiaro per testi su sfondo scuro
+$color-neutral-dark: #3C3C3C;    // Grigio scuro per sfondi
+$color-accent-dark: #F7931E;     // Arancione tecnico invariato
+$color-background-dark: #1A1A1A; // Sfondo principale scuro
+
+// Testo su tema chiaro
+$color-text-primary-light: #1A1A1A;   // testo principale molto scuro (vicino al nero ma non puro), su sfondo chiaro
+$color-text-secondary-light: #3C3C3C; // per testi meno importanti, descrizioni, note
+$color-text-inverse-light: #FFFFFF;     // per testi su sfondo scuro / pulsanti scuri
+
+// Testo su tema scuro
+$color-text-primary-dark: #E5E5E5;    // testo principale chiaro (off-white), su sfondo scuro
+$color-text-secondary-dark: #B0B8C1;  // testo secondario, leggermente meno brillante
+$color-text-inverse-dark: #1A1A1A;     // per testi su sfondo chiaro / elementi di inversione
