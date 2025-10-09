@@ -1,91 +1,93 @@
 <!-- Hero Section -->
-<section class="hero-section">
-  <div class="container">
-    <div class="hero-content">
-      <h1 class="hero-title">
-        Innovazione Industriale <br>
-        <span class="highlight">Tecnogenco</span>
-      </h1>
-      <p class="hero-subtitle">
-        Soluzioni avanzate per l'automazione industriale, PLC e sistemi SCADA.
-        Trasformiamo la tua produzione con tecnologia all'avanguardia.
-      </p>
-      <div class="hero-actions">
-        <app-primary-button ariaLabel="Scopri i nostri prodotti">Scopri Prodotti</app-primary-button>
-        <app-secondary-button ariaLabel="Contattaci">Contattaci</app-secondary-button>
+<section class="bg-gradient-to-br from-primary-50 to-secondary-50 py-16 min-h-[70vh] flex items-center">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="grid items-center grid-cols-1 gap-16 lg:grid-cols-2">
+      <div class="hero-content">
+        <h1 class="mb-6 text-5xl font-bold leading-tight lg:text-6xl text-on-surface">
+          Innovazione Industriale <br>
+          <span class="text-primary-600">Tecnogenco</span>
+        </h1>
+        <p class="mb-8 text-lg leading-relaxed text-secondary-600">
+          Soluzioni avanzate per l'automazione industriale, PLC e sistemi SCADA.
+          Trasformiamo la tua produzione con tecnologia all'avanguardia.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <app-primary-button ariaLabel="Scopri i nostri prodotti">Scopri Prodotti</app-primary-button>
+          <app-secondary-button ariaLabel="Contattaci">Contattaci</app-secondary-button>
+        </div>
       </div>
-    </div>
-    <div class="hero-visual">
-      <div class="hero-placeholder">
-        <svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="300" height="200" rx="8" fill="var(--color-primary-100)" />
-          <g transform="translate(50, 50)">
-            <rect x="0" y="30" width="80" height="40" rx="4" fill="var(--color-primary-500)" />
-            <rect x="25" y="0" width="30" height="100" fill="var(--color-primary-600)" />
-            <circle cx="35" cy="50" r="8" fill="var(--color-tertiary-500)" />
-            <circle cx="65" cy="50" r="8" fill="var(--color-tertiary-500)" />
-          </g>
-          <text x="200" y="120" font-family="Arial" font-size="14" fill="var(--color-secondary-600)">Sistema SCADA</text>
-        </svg>
+      <div class="flex items-center justify-center">
+        <div class="p-8 rounded-lg shadow-lg bg-surface">
+          <svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="200" rx="8" fill="var(--color-primary-100)" />
+            <g transform="translate(50, 50)">
+              <rect x="0" y="30" width="80" height="40" rx="4" fill="var(--color-primary-500)" />
+              <rect x="25" y="0" width="30" height="100" fill="var(--color-primary-600)" />
+              <circle cx="35" cy="50" r="8" fill="var(--color-tertiary-500)" />
+              <circle cx="65" cy="50" r="8" fill="var(--color-tertiary-500)" />
+            </g>
+            <text x="200" y="120" font-family="Arial" font-size="14" fill="var(--color-secondary-600)">Sistema SCADA</text>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Services Section -->
-<section class="services-section">
-  <div class="container">
-    <div class="section-header">
-      <h2>I Nostri Servizi</h2>
-      <p>Soluzioni complete per l'automazione e il controllo industriale</p>
+<section class="py-20 bg-surface">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="mb-12 text-center">
+      <h2 class="mb-4 text-4xl font-bold text-on-surface">I Nostri Servizi</h2>
+      <p class="max-w-2xl mx-auto text-lg text-secondary-600">Soluzioni complete per l'automazione e il controllo industriale</p>
     </div>
-    <div class="services-grid">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
       <app-card elevation="2">
-        <div class="service-card">
-          <div class="service-icon">
+        <div class="h-full text-center">
+          <div class="flex justify-center mb-6">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
               <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3>Programmazione PLC</h3>
-          <p>Sviluppo e configurazione di controllori logici programmabili per processi industriali complessi.</p>
+          <h3 class="mb-4 text-xl font-semibold text-on-surface">Programmazione PLC</h3>
+          <p class="leading-relaxed text-secondary-600">Sviluppo e configurazione di controllori logici programmabili per processi industriali complessi.</p>
         </div>
       </app-card>
 
       <app-card elevation="2">
-        <div class="service-card">
-          <div class="service-icon">
+        <div class="h-full text-center">
+          <div class="flex justify-center mb-6">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
               <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3>Sistemi SCADA</h3>
-          <p>Implementazione di sistemi di supervisione e controllo per monitoraggio in tempo reale.</p>
+          <h3 class="mb-4 text-xl font-semibold text-on-surface">Sistemi SCADA</h3>
+          <p class="leading-relaxed text-secondary-600">Implementazione di sistemi di supervisione e controllo per monitoraggio in tempo reale.</p>
         </div>
       </app-card>
 
       <app-card elevation="2">
-        <div class="service-card">
-          <div class="service-icon">
+        <div class="h-full text-center">
+          <div class="flex justify-center mb-6">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
               <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3>Automazione Industriale</h3>
-          <p>Progettazione e realizzazione di sistemi di automazione per ottimizzare i processi produttivi.</p>
+          <h3 class="mb-4 text-xl font-semibold text-on-surface">Automazione Industriale</h3>
+          <p class="leading-relaxed text-secondary-600">Progettazione e realizzazione di sistemi di automazione per ottimizzare i processi produttivi.</p>
         </div>
       </app-card>
 
       <app-card elevation="2">
-        <div class="service-card">
-          <div class="service-icon">
+        <div class="h-full text-center">
+          <div class="flex justify-center mb-6">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
               <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3>Manutenzione e Supporto</h3>
-          <p>Servizi di manutenzione preventiva e supporto tecnico continuo per i tuoi sistemi.</p>
+          <h3 class="mb-4 text-xl font-semibold text-on-surface">Manutenzione e Supporto</h3>
+          <p class="leading-relaxed text-secondary-600">Servizi di manutenzione preventiva e supporto tecnico continuo per i tuoi sistemi.</p>
         </div>
       </app-card>
     </div>
@@ -93,38 +95,38 @@
 </section>
 
 <!-- About Section -->
-<section class="about-section">
-  <div class="container">
-    <div class="about-content">
+<section class="py-20" style="background: color-mix(in srgb, var(--color-secondary-50) 30%, white);">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="grid items-center grid-cols-1 gap-16 lg:grid-cols-2">
       <div class="about-text">
-        <h2>Chi Siamo</h2>
-        <p>
+        <h2 class="mb-6 text-4xl font-bold text-on-surface">Chi Siamo</h2>
+        <p class="mb-4 text-lg leading-relaxed text-secondary-600">
           Tecnogenco è leader nell'automazione industriale dal 2010. Con una squadra di esperti
           qualificati e una passione per l'innovazione, aiutiamo le aziende a ottimizzare i loro
           processi produttivi attraverso soluzioni tecnologiche avanzate.
         </p>
-        <p>
+        <p class="mb-8 text-lg leading-relaxed text-secondary-600">
           La nostra esperienza copre tutti gli aspetti dell'automazione: dalla programmazione PLC
           alla realizzazione di sistemi SCADA, fino all'implementazione di soluzioni IoT per
           l'Industria 4.0.
         </p>
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-number">500+</div>
-            <div class="stat-label">Progetti Completati</div>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div class="text-center">
+            <div class="mb-2 text-4xl font-bold text-primary-600">500+</div>
+            <div class="text-sm font-medium tracking-wide uppercase text-secondary-600">Progetti Completati</div>
           </div>
-          <div class="stat">
-            <div class="stat-number">15+</div>
-            <div class="stat-label">Anni di Esperienza</div>
+          <div class="text-center">
+            <div class="mb-2 text-4xl font-bold text-primary-600">15+</div>
+            <div class="text-sm font-medium tracking-wide uppercase text-secondary-600">Anni di Esperienza</div>
           </div>
-          <div class="stat">
-            <div class="stat-number">98%</div>
-            <div class="stat-label">Soddisfazione Clienti</div>
+          <div class="text-center">
+            <div class="mb-2 text-4xl font-bold text-primary-600">98%</div>
+            <div class="text-sm font-medium tracking-wide uppercase text-secondary-600">Soddisfazione Clienti</div>
           </div>
         </div>
       </div>
-      <div class="about-visual">
-        <div class="about-placeholder">
+      <div class="flex items-center justify-center">
+        <div class="p-8 rounded-lg shadow-lg bg-surface">
           <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
             <rect width="400" height="300" rx="8" fill="var(--color-secondary-100)" />
             <g transform="translate(50, 50)">
@@ -146,11 +148,11 @@
 </section>
 
 <!-- Gallery Section -->
-<section class="gallery-section">
-	<div class="container">
-		<div class="section-header">
-			<h2>I Nostri Lavori</h2>
-			<p>Scopri alcuni dei nostri progetti e realizzazioni</p>
+<section class="py-20 bg-surface">
+	<div class="container px-4 mx-auto max-w-7xl">
+		<div class="mb-12 text-center">
+			<h2 class="mb-4 text-4xl font-bold text-on-surface">I Nostri Lavori</h2>
+			<p class="text-lg text-secondary-600">Scopri alcuni dei nostri progetti e realizzazioni</p>
 		</div>
 		<app-carousel
 			[photos]="localPhotos"
@@ -162,64 +164,64 @@
 </section>
 
 <!-- Features Section -->
-<section class="features-section">
-  <div class="container">
-    <div class="section-header">
-      <h2>Perché Scegliere Tecnogenco</h2>
-      <p>I nostri punti di forza per il tuo successo</p>
+<section class="py-20 bg-surface">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="mb-12 text-center">
+      <h2 class="mb-4 text-4xl font-bold text-on-surface">Perché Scegliere Tecnogenco</h2>
+      <p class="text-lg text-secondary-600">I nostri punti di forza per il tuo successo</p>
     </div>
-    <div class="features-grid">
-      <div class="feature-item">
-        <div class="feature-icon">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+      <div class="text-center">
+        <div class="flex justify-center mb-4">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h3>Tecnologia Avanzata</h3>
-        <p>Utilizziamo le più moderne tecnologie per garantire prestazioni ottimali e affidabilità.</p>
+        <h3 class="mb-2 text-xl font-semibold text-on-surface">Tecnologia Avanzata</h3>
+        <p class="leading-relaxed text-secondary-600">Utilizziamo le più moderne tecnologie per garantire prestazioni ottimali e affidabilità.</p>
       </div>
 
-      <div class="feature-item">
-        <div class="feature-icon">
+      <div class="text-center">
+        <div class="flex justify-center mb-4">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
             <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h3>Team Esperto</h3>
-        <p>Professionisti qualificati con anni di esperienza nel settore dell'automazione industriale.</p>
+        <h3 class="mb-2 text-xl font-semibold text-on-surface">Team Esperto</h3>
+        <p class="leading-relaxed text-secondary-600">Professionisti qualificati con anni di esperienza nel settore dell'automazione industriale.</p>
       </div>
 
-      <div class="feature-item">
-        <div class="feature-icon">
+      <div class="text-center">
+        <div class="flex justify-center mb-4">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h3>Qualità Garantita</h3>
-        <p>Ogni progetto è sottoposto a rigorosi controlli di qualità per assicurare risultati eccellenti.</p>
+        <h3 class="mb-2 text-xl font-semibold text-on-surface">Qualità Garantita</h3>
+        <p class="leading-relaxed text-secondary-600">Ogni progetto è sottoposto a rigorosi controlli di qualità per assicurare risultati eccellenti.</p>
       </div>
 
-      <div class="feature-item">
-        <div class="feature-icon">
+      <div class="text-center">
+        <div class="flex justify-center mb-4">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
             <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M12 2v2m0 16v2M2 12h2m16 0h2" stroke="var(--color-primary-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h3>Supporto Continuo</h3>
-        <p>Assistenza tecnica e manutenzione per garantire il funzionamento ottimale dei tuoi sistemi.</p>
+        <h3 class="mb-2 text-xl font-semibold text-on-surface">Supporto Continuo</h3>
+        <p class="leading-relaxed text-secondary-600">Assistenza tecnica e manutenzione per garantire il funzionamento ottimale dei tuoi sistemi.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CTA Section -->
-<section class="cta-section">
-  <div class="container">
+<section class="py-20 bg-gradient-to-r from-primary-600 to-secondary-600">
+  <div class="container max-w-4xl px-4 mx-auto text-center">
     <div class="cta-content">
-      <h2>Pronto a Trasformare la Tua Produzione?</h2>
-      <p>Contattaci oggi per una consulenza gratuita e scopri come possiamo aiutarti.</p>
-      <div class="cta-actions">
+      <h2 class="mb-4 text-4xl font-bold text-white">Pronto a Trasformare la Tua Produzione?</h2>
+      <p class="mb-8 text-xl text-white/90">Contattaci oggi per una consulenza gratuita e scopri come possiamo aiutarti.</p>
+      <div class="flex flex-col justify-center gap-4 sm:flex-row">
         <app-primary-button ariaLabel="Richiedi una consulenza">Richiedi Consulenza</app-primary-button>
         <app-secondary-button ariaLabel="Chiama ora">Chiama Ora: +39 123 456 7890</app-secondary-button>
       </div>

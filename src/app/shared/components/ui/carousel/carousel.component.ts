@@ -110,7 +110,7 @@ import { LocalPhoto } from '../../../../core/services/data.service';
       border-radius: 0.75rem;
       overflow: hidden;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
       height: 300px;
       width: 100%;
       max-width: 100%;
