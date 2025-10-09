@@ -1,0 +1,48 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Industrial / PLC / SCADA-ish base palettes (you can tweak hexes or use different built-in palettes)
+$primary-palette: mat.define-palette(mat.$blue-palette, 800);
+$secondary-palette: mat.define-palette(mat.$gray-palette, 700);
+$tertiary-palette: mat.define-palette(mat.$green-palette, 600);
+$accent-palette: mat.define-palette(mat.$orange-palette, A200);
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+$techno-theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  )
+));
+
+// Generate component themes using Material's theme system
+@include mat.all-component-themes($techno-theme);
+
+// Expose CSS variables so Tailwind (and other parts of the app) can reuse the same colors.
+:root {
+  /* Primary */
+  --color-primary: #{mat.get-color-from-palette($primary-palette, 800)};
+  --color-primary-600: #{mat.get-color-from-palette($primary-palette, 600)};
+  --color-primary-200: #{mat.get-color-from-palette($primary-palette, 200)};
+
+  /* Secondary (neutral/console backgrounds, borders) */
+  --color-secondary: #{mat.get-color-from-palette($secondary-palette, 700)};
+  --color-secondary-500: #{mat.get-color-from-palette($secondary-palette, 500)};
+  --color-secondary-100: #{mat.get-color-from-palette($secondary-palette, 100)};
+
+  /* Tertiary (status/ok indicators, accents) */
+  --color-tertiary: #{mat.get-color-from-palette($tertiary-palette, 600)};
+  --color-tertiary-400: #{mat.get-color-from-palette($tertiary-palette, 400)};
+
+  /* Accent & warn */
+  --color-accent: #{mat.get-color-from-palette($accent-palette, A200)};
+  --color-warn: #{mat.get-color-from-palette($warn-palette, 500)};
+
+  /* General surfaces */
+  --color-bg: #f6f7f8;
+  --color-surface: #ffffff;
+  --color-on-primary: #ffffff;
+  --color-on-surface: #111827;
+}
