@@ -145,6 +145,22 @@
   </div>
 </section>
 
+<!-- Gallery Section -->
+<section class="gallery-section">
+	<div class="container">
+		<div class="section-header">
+			<h2>I Nostri Lavori</h2>
+			<p>Scopri alcuni dei nostri progetti e realizzazioni</p>
+		</div>
+		<app-carousel
+			[photos]="localPhotos"
+			[visibleCount]="3"
+			[autoPlay]="true"
+			[autoPlayInterval]="4000">
+		</app-carousel>
+	</div>
+</section>
+
 <!-- Features Section -->
 <section class="features-section">
   <div class="container">
