@@ -22,14 +22,14 @@ export class DataService {
   getLocalPhotos(): Observable<LocalPhoto[]> {
     const photos: LocalPhoto[] = [];
     let index = 1;
-    const maxPhotos = 10; // Limite massimo di 10 foto
+    const maxPhotos = 5; // Limitato alle foto esistenti
 
     // Genera un array di foto basato su file esistenti
     // In produzione, questo potrebbe essere sostituito con una chiamata API
     while (index <= maxPhotos) {
       const photo: LocalPhoto = {
         id: `foto_${index}`,
-        source: `/assets/photos/foto_${index}.jpg`,
+        source: `/assets/foto_${index}.jpg`, // Aggiungi lo slash iniziale
         name: this.getPhotoTitle(index),
         description: this.getPhotoDescription(index)
       };
