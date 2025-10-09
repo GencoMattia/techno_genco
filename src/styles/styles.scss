@@ -7,3 +7,34 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Test sicuro per icone sole/luna su MatSlideToggle (global) */
+.theme-toggle .mdc-switch__icons { display: none !important; }
+
+/* Non tocchiamo larghezza/altezza del handle: solo rendiamolo relativo */
+.theme-toggle .mdc-switch__handle {
+  position: relative !important;
+  /* non impostare overflow: visible; lasciamo il comportamento nativo */
+}
+
+/* Pseudo-elemento che occupa esattamente lo spazio del handle */
+.theme-toggle .mdc-switch__handle::after {
+  content: 'light_mode';
+  font-family: 'Material Icons';
+  font-size: 14px;
+  color: #FFD600;
+  position: absolute;
+  inset: 0;                     /* riempie il manico senza modificarne le dimensioni */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* Stato selezionato -> luna */
+.theme-toggle.mdc-switch--selected .mdc-switch__handle::after,
+.theme-toggle .mdc-switch--selected .mdc-switch__handle::after {
+  content: 'dark_mode';
+  color: #2F4B6E;
+}
