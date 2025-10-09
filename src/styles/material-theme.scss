@@ -1,29 +1,103 @@
-/* Simple CSS-variable theme fallback for Tailwind + app usage.
-   These hex values are opinionated and tuned for an "industrial" look.
-   You can replace them with brand-specific hexs later. */
+/* Full palette tokens for light/dark (class-based). */
 
 :root {
-  /* Primary (industrial blue) */
-  --color-primary: #0f4c81; /* deep blue */
-  --color-primary-600: #145a98;
-  --color-primary-200: #7aa6d6;
+  /* Primary - industrial blue */
+  --color-primary-50:  #edf6fb;
+  --color-primary-100: #d6eef8;
+  --color-primary-200: #bfe6f4;
+  --color-primary-300: #8fd3ee;
+  --color-primary-400: #4fa7e0;
+  --color-primary-500: #0f88d1; /* default */
+  --color-primary-600: #0d6fae;
+  --color-primary-700: #0b568b;
+  --color-primary-800: #084069;
+  --color-primary-900: #062a47;
 
-  /* Secondary (neutral / console) */
-  --color-secondary: #55606a;
-  --color-secondary-500: #6b7781;
-  --color-secondary-100: #cdd6dc;
+  /* Secondary - neutral slate */
+  --color-secondary-50:  #f6f8f9;
+  --color-secondary-100: #eef2f4;
+  --color-secondary-200: #e0e6ea;
+  --color-secondary-300: #c9d5dc;
+  --color-secondary-400: #a9b7c0;
+  --color-secondary-500: #7f95a0; /* default */
+  --color-secondary-600: #6a7c86;
+  --color-secondary-700: #53656f;
+  --color-secondary-800: #3b4952;
+  --color-secondary-900: #222c34;
 
-  /* Tertiary (status/ok) */
-  --color-tertiary: #20803b;
-  --color-tertiary-400: #36a85a;
+  /* Tertiary - green (status/ok) */
+  --color-tertiary-50:  #eefaf3;
+  --color-tertiary-100: #dff6e6;
+  --color-tertiary-200: #c4eecb;
+  --color-tertiary-300: #97e0a0;
+  --color-tertiary-400: #57c96d;
+  --color-tertiary-500: #28b24f; /* default */
+  --color-tertiary-600: #1f923f;
+  --color-tertiary-700: #176f2f;
+  --color-tertiary-800: #114f21;
+  --color-tertiary-900: #0b3114;
 
   /* Accent & warn */
-  --color-accent: #ff7a18;
-  --color-warn: #e02424;
+  --color-accent-500: #ff8a2b;
+  --color-warn-500:   #e02424;
 
-  /* General surfaces */
+  /* Semantic aliases (convenience) */
+  --color-primary: var(--color-primary-500);
+  --color-secondary: var(--color-secondary-500);
+  --color-tertiary: var(--color-tertiary-500);
+  --color-accent: var(--color-accent-500);
+  --color-warn: var(--color-warn-500);
+
   --color-bg: #f4f6f8;
   --color-surface: #ffffff;
   --color-on-primary: #ffffff;
   --color-on-surface: #0f1724;
+}
+
+/* Dark mode - class-based override. Add "dark" to <html> or <body> to enable. */
+.dark {
+  --color-primary-50:  #041727;
+  --color-primary-100: #062436;
+  --color-primary-200: #083044;
+  --color-primary-300: #0b4460;
+  --color-primary-400: #0e5b7b;
+  --color-primary-500: #0f88d1;
+  --color-primary-600: #39a3e3;
+  --color-primary-700: #6cc0f5;
+  --color-primary-800: #9fe0ff;
+  --color-primary-900: #dff8ff;
+
+  --color-secondary-50:  #0b1214;
+  --color-secondary-100: #0f1518;
+  --color-secondary-200: #182125;
+  --color-secondary-300: #233038;
+  --color-secondary-400: #30424d;
+  --color-secondary-500: #7f95a0;
+  --color-secondary-600: #9aa9b3;
+  --color-secondary-700: #b5c0c9;
+  --color-secondary-800: #d0dbe1;
+  --color-secondary-900: #ebf6fb;
+
+  --color-tertiary-50:  #04130b;
+  --color-tertiary-100: #07220f;
+  --color-tertiary-200: #093116;
+  --color-tertiary-300: #0c491f;
+  --color-tertiary-400: #136633;
+  --color-tertiary-500: #28b24f;
+  --color-tertiary-600: #4fdc7a;
+  --color-tertiary-700: #81f0a2;
+  --color-tertiary-800: #b9f8cf;
+  --color-tertiary-900: #ecfff7;
+
+  --color-accent-500: #ffb27a;
+  --color-warn-500:   #ff7b7b;
+
+  --color-primary: var(--color-primary-200);
+  --color-secondary: var(--color-secondary-200);
+  --color-tertiary: var(--color-tertiary-200);
+
+  --color-bg: #071018;
+  --color-surface: #071a22;
+  --color-on-primary: #062a36;
+  --color-on-surface: #e6f0f6;
 }

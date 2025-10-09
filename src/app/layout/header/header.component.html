@@ -1,11 +1,14 @@
 <header class="site-header" role="banner">
 	<div class="container">
-		<div class="brand">
-			<a class="logo" routerLink="/" aria-label="TechnoGenco home">
-				<!-- simple text logo; replace with image/svg as needed -->
-				<strong>Techno<span class="accent">Genco</span></strong>
-			</a>
-		</div>
+			<div class="brand">
+				<a class="logo" routerLink="/" aria-label="Tecnogenco home">
+					<!-- Placeholder SVG logo for Tecnogenco -->
+					<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+						<rect width="36" height="36" rx="6" fill="var(--color-primary-500)" />
+						<text x="50%" y="52%" text-anchor="middle" font-size="12" font-family="Arial" fill="var(--color-on-primary)">TG</text>
+					</svg>
+				</a>
+			</div>
 
 		<nav class="main-nav" role="navigation" aria-label="Primary navigation">
 			<ul [class.open]="mobileOpen">
@@ -18,8 +21,14 @@
 		</nav>
 
 		<div class="actions">
-			<app-secondary-button ariaLabel="Login">Login</app-secondary-button>
-			<app-primary-button ariaLabel="Richiedi Demo">Richiedi Demo</app-primary-button>
+					<app-secondary-button ariaLabel="Login">Login</app-secondary-button>
+					<app-primary-button ariaLabel="Richiedi Demo">Richiedi Demo</app-primary-button>
+					<button class="theme-toggle" aria-label="Toggle theme" (click)="toggleTheme()" title="Toggle theme">
+						<!-- sun/moon placeholder icon -->
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+						</svg>
+					</button>
 					<button class="burger" aria-label="Menu" [attr.aria-expanded]="mobileOpen" (click)="toggleMobile()">
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
 					<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />

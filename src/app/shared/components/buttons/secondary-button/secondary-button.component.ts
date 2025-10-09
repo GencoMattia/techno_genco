@@ -14,16 +14,16 @@ import { CommonModule } from '@angular/common';
     `
     .secondary-btn {
       background: transparent;
-      color: var(--color-primary);
+      color: var(--color-primary-500);
       padding: 0.45rem 0.9rem;
       border-radius: 0.375rem;
-      border: 1px solid color-mix(in srgb, var(--color-primary) 20%, black);
+      border: 1px solid color-mix(in srgb, var(--color-primary-200) 30%, transparent);
       font-weight: 600;
       cursor: pointer;
-      transition: background .12s ease, transform .08s ease;
+      transition: background .12s ease, transform .08s ease, color .12s ease;
     }
-    .secondary-btn:hover { background: color-mix(in srgb, var(--color-primary) 8%, transparent); transform: translateY(-1px); }
-    .secondary-btn:focus { outline: 3px solid color-mix(in srgb, var(--color-primary) 20%, white); outline-offset: 2px; }
+    .secondary-btn:hover { background: color-mix(in srgb, var(--color-primary-50) 40%, transparent); transform: translateY(-1px); color: var(--color-primary-600); }
+    .secondary-btn:focus { outline: 3px solid color-mix(in srgb, var(--color-primary-200) 30%, white); outline-offset: 2px; }
     `
   ]
 })

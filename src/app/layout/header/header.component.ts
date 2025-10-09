@@ -17,4 +17,16 @@ export class HeaderComponent {
   toggleMobile() {
     this.mobileOpen = !this.mobileOpen;
   }
+  
+  constructor() {
+    // Apply saved theme preference
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') document.documentElement.classList.add('dark');
+  }
+
+  toggleTheme() {
+    const el = document.documentElement;
+    const isDark = el.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
 }
