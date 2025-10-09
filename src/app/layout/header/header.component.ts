@@ -17,7 +17,7 @@ export class HeaderComponent {
   toggleMobile() {
     this.mobileOpen = !this.mobileOpen;
   }
-  
+
   constructor() {
     // Apply saved theme preference
     const saved = localStorage.getItem('theme');

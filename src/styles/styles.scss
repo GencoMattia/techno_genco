@@ -1,6 +1,6 @@
-@import './variables';
-@import './global';
-@import './material-theme';
+@use './variables' as *;
+@use './global' as *;
+@use './material-theme' as *;
 
 @tailwind base;
 @tailwind components;

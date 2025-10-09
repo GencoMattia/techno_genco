@@ -27,8 +27,10 @@
 	text-decoration: none;
 	color: var(--color-on-surface);
 }
-.brand .logo svg rect { fill: var(--color-primary-500); }
-.brand .logo svg text { fill: var(--color-on-primary); font-weight: 700; }
+.brand .logo img {
+	height: 40px;
+	width: auto;
+}
 
 .main-nav ul {
 	display: flex;
