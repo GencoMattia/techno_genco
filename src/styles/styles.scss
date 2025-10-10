@@ -9,6 +9,11 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* Prevent horizontal overflow on pages with full-bleed sections */
+html, body {
+  overflow-x: hidden;
+}
+
 /* Test sicuro per icone sole/luna su MatSlideToggle (global) */
 .theme-toggle .mdc-switch__icons { display: none !important; }
 
