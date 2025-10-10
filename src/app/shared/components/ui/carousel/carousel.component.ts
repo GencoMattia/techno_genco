@@ -33,7 +33,7 @@ import { LocalPhoto } from '../../../../core/services/data.service';
         </button>
 
         <!-- Pagination -->
-        <div class="flex justify-center absolute bottom-3 left-0 right-0 gap-x-2">
+        <div class="flex justify-center absolute bottom-0 left-0 right-0 gap-x-2 mt-2">
           <button *ngFor="let i of indicatorArray; let idx = index" (click)="goToIndicator(idx)" [attr.aria-label]="'Vai alla slide ' + (idx + 1)" class="w-3 h-3 rounded-full border border-gray-300 disabled:opacity-50" [ngClass]="{'bg-primary-500': idx === currentIndicator, 'bg-secondary-300': idx !== currentIndicator}"></button>
         </div>
       </div>
@@ -54,7 +54,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   @Input() photos: LocalPhoto[] = [];
   @Input() visibleCount = 3;
   @Input() autoPlay = true;
-  @Input() autoPlayInterval = 5000;
+  @Input() autoPlayInterval = 7000;
 
   error = false;
   errorMessage = 'Impossibile caricare le foto. Riprova più tardi.';
