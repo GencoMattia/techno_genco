@@ -1,1 +1,149 @@
-<p>about works!</p>
+<!-- Hero -->
+<section class="py-16 bg-gradient-to-br from-primary-50 to-secondary-50">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <div>
+        <h1 class="text-4xl font-bold leading-tight text-on-surface lg:text-5xl">Chi Siamo</h1>
+        <p class="max-w-2xl mt-6 text-lg text-secondary-600">
+          Siamo una realtà specializzata in automazione industriale: progettazione e programmazione PLC,
+          sistemi SCADA, HMI e soluzioni complete per il settore industriale. La nostra missione è
+          portare efficienza, sicurezza e innovazione nelle linee produttive dei nostri clienti.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mt-8">
+          <app-primary-button ariaLabel="Richiedi Consulenza">Richiedi Consulenza</app-primary-button>
+          <app-secondary-button ariaLabel="Contattaci">Contattaci</app-secondary-button>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <div class="p-6 shadow-lg bg-surface rounded-xl">
+          <!-- Simple illustrative svg matching homepage tone -->
+          <svg width="360" height="220" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="360" height="220" rx="10" fill="var(--color-secondary-100)" />
+            <g transform="translate(30,30)">
+              <rect x="0" y="60" width="120" height="60" rx="6" fill="var(--color-primary-500)" />
+              <rect x="40" y="0" width="40" height="140" fill="var(--color-primary-600)" />
+              <circle cx="60" cy="90" r="10" fill="var(--color-tertiary-500)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hidden reference so the Angular compiler recognizes ServiceCard usage during static analysis -->
+<ng-container *ngIf="false">
+  <app-service-card title="" description="" icon=""></app-service-card>
+</ng-container>
+
+<!-- Values / Stats -->
+<section class="py-16 bg-secondary-50">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="grid items-start gap-8 lg:grid-cols-3">
+      <div class="lg:col-span-2">
+        <h2 class="text-3xl font-bold text-on-surface">La nostra esperienza</h2>
+        <p class="max-w-2xl mt-4 text-secondary-600">
+          Dal 2010 accompagniamo aziende di diversi settori nello sviluppo e nell'implementazione di
+          sistemi di automazione. Forniamo servizi che vanno dalla consulenza iniziale fino al supporto
+          post-installazione, con un approccio pratico e orientato ai risultati.
+        </p>
+
+        <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-600">500+</div>
+            <div class="text-sm tracking-wider uppercase text-secondary-600">Progetti completati</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-600">15+</div>
+            <div class="text-sm tracking-wider uppercase text-secondary-600">Anni esperienza</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-600">98%</div>
+            <div class="text-sm tracking-wider uppercase text-secondary-600">Soddisfazione clienti</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+            <app-card elevation="2">
+              <h3 class="text-xl font-semibold text-on-surface">La nostra storia</h3>
+              <p class="mt-3 text-secondary-600">Nata nel 2010, Tecnogenco è cresciuta da un piccolo team di tecnici a un partner riconosciuto per soluzioni chiavi in mano nel campo dell'automazione. Crediamo in un approccio pragmatico: analisi, progetto, implementazione e supporto continuativo.</p>
+              <h4 class="mt-4 text-sm font-semibold text-on-surface">Missione</h4>
+              <p class="mt-1 text-secondary-600">Fornire soluzioni affidabili che aumentino l'efficienza produttiva e riducano i tempi di fermo, mettendo al centro sicurezza e facilità d'uso.</p>
+            </app-card>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Case Studies (unici della pagina About) -->
+    <section class="py-16 bg-surface">
+      <div class="container px-4 mx-auto max-w-7xl">
+        <div class="mb-8 text-center">
+          <h2 class="text-3xl font-bold text-on-surface">Case study</h2>
+          <p class="mt-2 text-secondary-600">Esempi concreti delle nostre integrazioni e risultati misurabili</p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <app-card elevation="2">
+            <h4 class="text-lg font-semibold text-on-surface">Ottimizzazione linea imballaggio</h4>
+            <p class="mt-2 text-secondary-600">Riduzione dei tempi di fermo del 30% grazie a una revisione delle logiche PLC e all'introduzione di monitoraggio predittivo.</p>
+          </app-card>
+
+          <app-card elevation="2">
+            <h4 class="text-lg font-semibold text-on-surface">Integrazione SCADA in impianto chimico</h4>
+            <p class="mt-2 text-secondary-600">Implementazione di un sistema SCADA centralizzato per il monitoraggio e la gestione remota, migliorando la supervisione e la sicurezza.</p>
+          </app-card>
+        </div>
+      </div>
+    </section>
+
+<!-- Services as cards -->
+<section class="py-16 bg-surface">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl font-bold text-on-surface">I nostri servizi</h2>
+      <p class="mt-2 text-secondary-600">Soluzioni su misura per PLC, SCADA, HMI e automazione industriale</p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <app-service-card title="Programmazione PLC" description="Sviluppo logiche di controllo su piattaforme Siemens, Schneider e Allen-Bradley" icon="developer_board"></app-service-card>
+
+      <app-service-card title="Sistemi SCADA" description="Progettazione e integrazione di sistemi di supervisione e acquisizione dati" icon="insights"></app-service-card>
+
+      <app-service-card title="HMI & Pannelli" description="Interfacce operatore intuitive per facilitare il lavoro e ridurre gli errori" icon="tablet_mac"></app-service-card>
+
+      <app-service-card title="Automazione di linea" description="Integrazione hardware e software per linee produttive ad alte prestazioni" icon="engineering"></app-service-card>
+
+      <app-service-card title="Manutenzione & Supporto" description="Contratti di assistenza e monitoraggio per continuità produttiva" icon="support_agent"></app-service-card>
+
+      <app-service-card title="Formazione tecnica" description="Corsi pratici e personalizzati per team operativi e di manutenzione" icon="school"></app-service-card>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="py-16 bg-secondary-50">
+  <div class="container px-4 mx-auto max-w-7xl">
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl font-bold text-on-surface">I nostri lavori</h2>
+      <p class="mt-2 text-secondary-600">Esempi di impianti e integrazioni realizzate</p>
+    </div>
+
+    <app-carousel [photos]="localPhotos" [visibleCount]="3" [autoPlay]="true" [autoPlayInterval]="4000"></app-carousel>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 bg-gradient-to-r from-primary-600 to-secondary-600">
+  <div class="container max-w-4xl px-4 mx-auto text-center">
+    <h3 class="text-2xl font-bold text-white">Hai un progetto da automatizzare?</h3>
+    <p class="mt-3 text-white/90">Contattaci per una consulenza tecnica e una stima gratuita. Offriamo soluzioni personalizzate per ogni esigenza industriale.</p>
+    <div class="flex justify-center gap-4 mt-6">
+      <app-primary-button ariaLabel="Richiedi preventivo">Richiedi Preventivo</app-primary-button>
+      <app-secondary-button ariaLabel="Chiama">Chiama +39 123 456 7890</app-secondary-button>
+    </div>
+  </div>
+</section>
