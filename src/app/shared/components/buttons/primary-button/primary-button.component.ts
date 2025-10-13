@@ -1,39 +1,41 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Primary button with simple variant support.
+ * Uses Tailwind utility classes for styling so it matches the rest of the site.
+ */
 @Component({
   selector: 'app-primary-button',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <button class="primary-btn" [attr.aria-label]="ariaLabel">
+    <button [type]="type" [ngClass]="buttonClass" [attr.aria-label]="ariaLabel">
       <ng-content></ng-content>
     </button>
-  `,
-  styles: [
-    `
-    .primary-btn {
-      background: var(--color-primary-500);
-      color: var(--color-on-primary);
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      border: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: transform .08s ease, box-shadow .12s ease, background .12s ease;
-    }
-    .primary-btn:focus {
-      outline: 3px solid color-mix(in srgb, var(--color-primary-400) 30%, white);
-      outline-offset: 2px;
-    }
-    .primary-btn:hover { transform: translateY(-1px); background: var(--color-primary-600); }
-    `
-  ]
+  `
 })
 export class PrimaryButtonComponent {
   @Input() ariaLabel = 'Primary action';
+  // variants: primary (filled), outline (border), ghost (text)
+  @Input() variant: 'primary' | 'outline' | 'ghost' = 'primary';
+  @Input() size: 'sm' | 'md' = 'md';
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+
+  get buttonClass() {
+    const base = 'inline-flex items-center justify-center gap-2 font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition';
+    const sizeClass = this.size === 'sm' ? 'px-3 py-1.5 text-sm' : 'px-4 py-2 text-sm';
+
+    if (this.variant === 'outline') {
+      return `${base} ${sizeClass} bg-transparent border border-primary-500 text-primary-500 hover:bg-primary-50 focus:ring-primary-400`;
+    }
+
+    if (this.variant === 'ghost') {
+      return `${base} ${sizeClass} bg-transparent text-primary-500 hover:bg-primary-50 focus:ring-primary-400`;
+    }
+
+    // default primary
+    return `${base} ${sizeClass} bg-primary-500 text-on-primary hover:bg-primary-600 focus:ring-primary-400`;
+  }
 }
 

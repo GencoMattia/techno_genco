@@ -1,6 +1,4 @@
-@use 'variables' as *;
-@use 'mat-theme' as *;
+@use 'theme/techno-material-theme' as techno-theme;
 
-/* The _mat-theme.scss builds the Angular Material palettes via mat.define-palette
-   and exports runtime CSS variables (via mat.get-color-from-palette). We forward
-   those variables to be used by Tailwind and the app. */
+/* The techno-material-theme exports CSS variables and maps based on the project's palette.
+   We import it here so the variables are available to the global stylesheet. */

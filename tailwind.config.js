@@ -51,6 +51,11 @@ module.exports = {
         surface: 'var(--color-surface)',
         bg: 'var(--color-bg)'
       }
+      ,
+      'on': {
+        primary: 'var(--color-on-primary)',
+        surface: 'var(--color-on-surface)'
+      }
     },
   },
   plugins: [],

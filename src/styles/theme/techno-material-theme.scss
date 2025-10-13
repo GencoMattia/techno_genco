@@ -1,0 +1,56 @@
+@use '../_variables' as vars;
+@use '../_mat-theme' as mat-theme;
+@use 'sass:map' as map;
+
+// Techno Genco Material Theme export
+// This file re-exports the color variables and defines a simple Material theme mapping
+
+// We will reuse the variables already declared in _mat-theme.scss and _variables.scss
+:root {
+  --color-primary-50: #{vars.$primary-50};
+  --color-primary-100: #{vars.$primary-100};
+  --color-primary-200: #{vars.$primary-200};
+  --color-primary-300: #{vars.$primary-300};
+  --color-primary-400: #{vars.$primary-400};
+  --color-primary-500: #{vars.$primary-500};
+  --color-primary-600: #{vars.$primary-600};
+  --color-primary-700: #{vars.$primary-700};
+  --color-primary-800: #{vars.$primary-800};
+  --color-primary-900: #{vars.$primary-900};
+
+  --color-secondary-50: #{vars.$secondary-50};
+  --color-secondary-100: #{vars.$secondary-100};
+  --color-secondary-200: #{vars.$secondary-200};
+  --color-secondary-300: #{vars.$secondary-300};
+  --color-secondary-400: #{vars.$secondary-400};
+  --color-secondary-500: #{vars.$secondary-500};
+  --color-secondary-600: #{vars.$secondary-600};
+  --color-secondary-700: #{vars.$secondary-700};
+  --color-secondary-800: #{vars.$secondary-800};
+  --color-secondary-900: #{vars.$secondary-900};
+
+  --color-tertiary-50: #{vars.$tertiary-50};
+  --color-tertiary-100: #{vars.$tertiary-100};
+  --color-tertiary-200: #{vars.$tertiary-200};
+  --color-tertiary-300: #{vars.$tertiary-300};
+  --color-tertiary-400: #{vars.$tertiary-400};
+  --color-tertiary-500: #{vars.$tertiary-500};
+  --color-tertiary-600: #{vars.$tertiary-600};
+  --color-tertiary-700: #{vars.$tertiary-700};
+  --color-tertiary-800: #{vars.$tertiary-800};
+  --color-tertiary-900: #{vars.$tertiary-900};
+
+  --color-accent-500: #{vars.$color-accent-light};
+  --color-warn-500: #{vars.$color-accent-light};
+
+  --color-primary: var(--color-primary-500);
+  --color-secondary: var(--color-secondary-500);
+  --color-tertiary: var(--color-tertiary-500);
+  --color-accent: var(--color-accent-500);
+  --color-warn: var(--color-warn-500);
+
+  --color-bg: #{vars.$color-background-light};
+  --color-surface: #ffffff;
+  --color-on-primary: #{vars.$color-text-inverse-light};
+  --color-on-surface: #{vars.$color-text-primary-light};
+}

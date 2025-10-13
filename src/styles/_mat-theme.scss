@@ -1,12 +1,8 @@
 @use './variables' as *;
-@use '../../node_modules/@angular/material/core/m2/_theming.scss' as mat;
-@use '../../node_modules/@angular/material/core/m2/_palette.scss' as palettes;
-@use 'sass:list' as list;
-@use 'sass:map' as map;
-@use 'sass:string' as string;
+@use '@angular/material' as mat;
 
-// Build palette maps expected by mat.define-palette using the SCSS shade variables
-$primary-map: (
+// Build Material palette maps from our custom shade variables
+$techno-primary-palette: (
   50: $primary-50,
   100: $primary-100,
   200: $primary-200,
@@ -18,45 +14,20 @@ $primary-map: (
   800: $primary-800,
   900: $primary-900,
   contrast: (
-    50: black,
-    100: black,
-    200: black,
-    300: black,
-    400: black,
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
     500: white,
     600: white,
     700: white,
     800: white,
-    900: white
+    900: white,
   )
 );
 
-$secondary-map: (
-  50: $secondary-50,
-  100: $secondary-100,
-  200: $secondary-200,
-  300: $secondary-300,
-  400: $secondary-400,
-  500: $secondary-500,
-  600: $secondary-600,
-  700: $secondary-700,
-  800: $secondary-800,
-  900: $secondary-900,
-  contrast: (
-    50: black,
-    100: black,
-    200: black,
-    300: black,
-    400: black,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white
-  )
-);
-
-$tertiary-map: (
+$techno-accent-palette: (
   50: $tertiary-50,
   100: $tertiary-100,
   200: $tertiary-200,
@@ -68,36 +39,63 @@ $tertiary-map: (
   800: $tertiary-800,
   900: $tertiary-900,
   contrast: (
-    50: black,
-    100: black,
-    200: black,
-    300: black,
-    400: black,
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
     500: white,
     600: white,
     700: white,
     800: white,
-    900: white
+    900: white,
   )
 );
 
-// Define palettes for Angular Material using built-in palettes (we'll override colors via CSS variables)
-$mat-primary: mat.define-palette(palettes.$blue-palette, 500);
-$mat-accent: mat.define-palette(palettes.$gray-palette, 500);
-$mat-warn: mat.define-palette(palettes.$orange-palette, 500);
+$techno-warn-palette: (
+  50: #fff3e0,
+  100: #ffe0b2,
+  200: #ffcc80,
+  300: #ffb74d,
+  400: #ffa726,
+  500: $color-accent-light,
+  600: #fb8c00,
+  700: #f57c00,
+  800: #ef6c00,
+  900: #e65100,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: rgba(black, 0.87),
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+// Define Material palettes using M2 API
+$mat-primary: mat.m2-define-palette($techno-primary-palette, 500);
+$mat-accent: mat.m2-define-palette($techno-accent-palette, 500);
+$mat-warn: mat.m2-define-palette($techno-warn-palette, 500);
 
 // Create a light theme
-$techno-theme: mat.define-light-theme((
+$techno-theme: mat.m2-define-light-theme((
   color: (
     primary: $mat-primary,
     accent: $mat-accent,
-    warn: $mat-warn
+    warn: $mat-warn,
   )
 ));
 
-// Note: To avoid build issues with mixin paths, we skip including Material component themes here.
-// The CSS variables are exported for our custom components. Material components will use default themes.
-// If needed, include @include mat.all-component-themes($techno-theme); with correct paths.
+// Include Material core styles (only once in your app)
+@include mat.core();
+
+// Apply the theme to all Material components
+@include mat.all-component-themes($techno-theme);
 
 // Export CSS variables for runtime use (using our custom colors)
 :root {
