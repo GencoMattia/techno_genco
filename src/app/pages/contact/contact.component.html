@@ -1,1 +1,44 @@
-<p>contact works!</p>
+<section class="py-16 bg-surface">
+	<div class="container px-4 mx-auto max-w-3xl">
+		<div class="text-center mb-8">
+			<h1 class="text-3xl font-bold text-on-surface">Contatti</h1>
+			<p class="mt-2 text-secondary-600">Hai bisogno di supporto o vuoi discutere un progetto? Mandaci una mail usando il form qui sotto.</p>
+		</div>
+
+		<form class="space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+				<!-- Honeypot anti-spam (hidden from users) -->
+				<input type="text" formControlName="hp" class="hidden" aria-hidden="true" tabindex="-1" />
+			<div>
+				<label class="block text-sm font-medium text-secondary-700 mb-2">La tua email</label>
+				<input type="email" formControlName="email" class="w-full p-3 border rounded-md bg-white/60 focus:outline-none focus:ring-2 focus:ring-primary-300" placeholder="tuo.nome@esempio.it" />
+				<div *ngIf="email?.touched && email?.invalid" class="mt-1 text-sm text-red-600">
+					<div *ngIf="email?.errors?.['required']">L'email è obbligatoria.</div>
+					<div *ngIf="email?.errors?.['email']">Inserisci un'email valida.</div>
+				</div>
+			</div>
+
+			<div>
+				<label class="block text-sm font-medium text-secondary-700 mb-2">Messaggio</label>
+				<textarea formControlName="message" rows="6" class="w-full p-3 border rounded-md bg-white/60 focus:outline-none focus:ring-2 focus:ring-primary-300" placeholder="Scrivi qui il tuo messaggio..."></textarea>
+				<div *ngIf="message?.touched && message?.invalid" class="mt-1 text-sm text-red-600">
+					<div *ngIf="message?.errors?.['required']">Il messaggio è obbligatorio.</div>
+					<div *ngIf="message?.errors?.['minlength']">Il messaggio deve contenere almeno 10 caratteri.</div>
+				</div>
+			</div>
+
+			<div class="flex gap-4">
+				<app-primary-button type="submit" ariaLabel="Invia messaggio">Invia messaggio</app-primary-button>
+				<app-secondary-button type="button" ariaLabel="Reset" (click)="form.reset()">Reset</app-secondary-button>
+			</div>
+		</form>
+
+			<div class="mt-8 text-sm text-secondary-600">
+				<p>In alternativa puoi scrivere direttamente a <a href="mailto:info@tecnogenco.it" class="text-primary-600 hover:underline">info&#64;tecnogenco.it</a> oppure chiamare <a href="tel:+391234567890" class="text-primary-600 hover:underline">+39 123 456 7890</a>.</p>
+			</div>
+	</div>
+</section>
+
+		<!-- Note: feedback now uses Material Snackbar; reCAPTCHA can be enabled via siteKey in the component -->
+		<div class="fixed left-4 bottom-6 text-xs text-secondary-500">
+			<span *ngIf="!siteKey">Nota: puoi abilitare reCAPTCHA impostando la proprietà <code>siteKey</code> nel componente.</span>
+		</div>
