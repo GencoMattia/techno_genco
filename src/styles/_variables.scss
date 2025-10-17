@@ -1,0 +1,64 @@
+// ================================
+// Palette Tecnica & Industriale
+// ================================
+
+// Tema Chiaro
+$color-primary-light: #2F4B6E;   // Blu acciaio
+$color-secondary-light: #3C3C3C; // Grigio scuro per testi
+$color-neutral-light: #E5E5E5;   // Grigio chiaro per sfondi
+$color-accent-light: #F7931E;    // Arancione tecnico (CTA, pulsanti)
+$color-background-light: #FFFFFF;// Sfondo principale
+
+// Tema Scuro
+$color-primary-dark: #2F4B6E;    // Blu acciaio (coerente tra i due temi)
+$color-secondary-dark: #E5E5E5;  // Grigio chiaro per testi su sfondo scuro
+$color-neutral-dark: #3C3C3C;    // Grigio scuro per sfondi
+$color-accent-dark: #F7931E;     // Arancione tecnico invariato
+$color-background-dark: #1A1A1A; // Sfondo principale scuro
+
+// Testo su tema chiaro
+$color-text-primary-light: #1A1A1A;   // testo principale molto scuro (vicino al nero ma non puro), su sfondo chiaro
+$color-text-secondary-light: #3C3C3C; // per testi meno importanti, descrizioni, note
+$color-text-inverse-light: #FFFFFF;     // per testi su sfondo scuro / pulsanti scuri
+
+// Testo su tema scuro
+$color-text-primary-dark: #E5E5E5;    // testo principale chiaro (off-white), su sfondo scuro
+$color-text-secondary-dark: #B0B8C1;  // testo secondario, leggermente meno brillante
+$color-text-inverse-dark: #1A1A1A;     // per testi su sfondo chiaro / elementi di inversione
+
+// ---- Detailed primary palette (shades) ----
+$primary-50:  #edf6fb;
+$primary-100: #d6eef8;
+$primary-200: #bfe6f4;
+$primary-300: #8fd3ee;
+$primary-400: #4fa7e0;
+$primary-500: #0f88d1;
+$primary-600: #0d6fae;
+$primary-700: #0b568b;
+$primary-800: #084069;
+$primary-900: #062a47;
+
+// ---- Secondary palette ----
+$secondary-50:  #f6f8f9;
+$secondary-100: #eef2f4;
+$secondary-200: #e0e6ea;
+$secondary-300: #c9d5dc;
+$secondary-400: #a9b7c0;
+$secondary-500: #7f95a0;
+$secondary-600: #6a7c86;
+$secondary-700: #53656f;
+$secondary-800: #3b4952;
+$secondary-900: #222c34;
+
+// ---- Tertiary palette ----
+$tertiary-50:  #eefaf3;
+$tertiary-100: #dff6e6;
+$tertiary-200: #c4eecb;
+$tertiary-300: #97e0a0;
+$tertiary-400: #57c96d;
+$tertiary-500: #28b24f;
+$tertiary-600: #1f923f;
+$tertiary-700: #176f2f;
+$tertiary-800: #114f21;
+$tertiary-900: #0b3114;
+

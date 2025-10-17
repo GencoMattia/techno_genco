@@ -1,0 +1,4 @@
+/* Preferiamo Tailwind; aggiungiamo solo micro-adjust */
+.container { max-width: 768px; }
+
+input::placeholder, textarea::placeholder { color: rgba(55,65,81,0.4); }

@@ -1,0 +1,4 @@
+@use 'theme/techno-material-theme' as techno-theme;
+
+/* The techno-material-theme exports CSS variables and maps based on the project's palette.
+   We import it here so the variables are available to the global stylesheet. */

@@ -1,16 +1,64 @@
 # TechnoGenco
 
+Modern Angular application for TechnoGenco - technical and industrial solutions company.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18 or higher recommended)
+- npm (comes with Node.js)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/GencoMattia/techno_genco.git
+
+# Navigate to project directory
+cd techno_genco
+
+# Install dependencies
+npm install
+```
 
 ## Development server
 
 To start a local development server, run:
 
 ```bash
+npm start
+# or
 ng serve
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## 📁 Project Structure
+
+The application includes the following main pages:
+
+- **Home** (`/`) - Landing page with hero section and company overview
+- **About** (`/about`) - Company information and mission
+- **Products** (`/products`) - Product catalog with alternating image/text layout
+- **Solutions** (`/solutions`) - Technical solutions showcase
+- **Resources** (`/resources`) - Team profiles and resources
+- **Contact** (`/contact`) - Contact form and information
+
+## 🎨 Theming & Styling
+
+This project uses:
+- **Tailwind CSS** - Utility-first CSS framework
+- **Angular Material** - Material Design components with custom theme
+- **Custom Color Palette** - Technical/industrial color scheme defined in `src/styles/_variables.scss`
+
+### Theme Colors
+- Primary: Blue Steel (#0f88d1)
+- Accent: Technical Orange (#F7931E)
+- Tertiary: Green (#28b24f)
+
+The Material theme is fully integrated and maps custom palette variables to Material components.
 
 ## Code scaffolding
 

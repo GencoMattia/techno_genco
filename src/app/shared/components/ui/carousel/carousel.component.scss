@@ -1,0 +1,12 @@
+/* Minimal carousel styles — use Tailwind utilities where possible */
+.carousel-track-container {
+  /* ensure the container doesn't grow based on children images */
+  min-width: 0;
+}
+
+/* Add a small shadow to slides on larger screens */
+@media (min-width: 768px) {
+  .carousel-track-container img {
+    box-shadow: 0 6px 18px rgba(18, 38, 63, 0.08);
+  }
+}

@@ -1,0 +1,60 @@
+<footer class="w-full border-t bg-surface border-secondary-100/40 text-secondary-700">
+	<div class="px-4 py-12 mx-auto max-w-7xl">
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+			<div>
+				<a routerLink="/" class="inline-flex items-center gap-3 no-underline text-on-surface">
+					<img src="assets/logo.jpg" alt="Tecnogenco logo" class="w-auto h-8" />
+					<span class="font-semibold">Tecnogenco</span>
+				</a>
+				<p class="mt-3 text-sm text-secondary-600">Soluzioni di automazione industriale, PLC e SCADA per impianti ad elevate prestazioni.</p>
+			</div>
+
+			<div class="flex justify-between md:justify-center">
+				<div>
+					<h4 class="mb-3 text-sm font-semibold text-on-surface">Prodotti</h4>
+					<ul class="space-y-2 text-sm">
+						<li><a routerLink="/products" class="text-secondary-600 hover:text-on-surface">Catalogo</a></li>
+						<li><a routerLink="/solutions" class="text-secondary-600 hover:text-on-surface">Soluzioni</a></li>
+						<li><a routerLink="/services" class="text-secondary-600 hover:text-on-surface">Servizi</a></li>
+					</ul>
+				</div>
+				<div class="hidden md:block">
+					<h4 class="mb-3 text-sm font-semibold text-on-surface">Risorse</h4>
+					<ul class="space-y-2 text-sm">
+						<li><a routerLink="/about" class="text-secondary-600 hover:text-on-surface">Chi siamo</a></li>
+						<li><a routerLink="/contact" class="text-secondary-600 hover:text-on-surface">Contatti</a></li>
+						<li><a routerLink="/blog" class="text-secondary-600 hover:text-on-surface">Blog</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="md:text-right">
+				<h4 class="mb-3 text-sm font-semibold text-on-surface">Contattaci</h4>
+				<p class="text-sm text-secondary-600">Email: <a href="mailto:info&#64;tecnogenco.it" class="hover:text-on-surface">info&#64;tecnogenco.it</a></p>
+				<p class="mt-2 text-sm text-secondary-600">Tel: <a href="tel:+391234567890" class="hover:text-on-surface">+39 123 456 7890</a></p>
+
+				<div class="flex justify-start gap-3 mt-4 md:justify-end" role="navigation" aria-label="Social media links">
+					<a href="#" title="Facebook" aria-label="Facebook - Tecnogenco" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary-100 text-secondary-600 hover:bg-primary-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2" target="_blank" rel="noopener noreferrer">
+						<mat-icon svgIcon="facebook" class="w-4 h-4" aria-hidden="true"></mat-icon>
+					</a>
+
+					<a href="#" title="LinkedIn" aria-label="LinkedIn - Tecnogenco" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary-100 text-secondary-600 hover:bg-primary-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2" target="_blank" rel="noopener noreferrer">
+						<mat-icon svgIcon="linkedin" class="w-4 h-4" aria-hidden="true"></mat-icon>
+					</a>
+
+					<a href="#" title="Instagram" aria-label="Instagram - Tecnogenco" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary-100 text-secondary-600 hover:bg-primary-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2" target="_blank" rel="noopener noreferrer">
+						<mat-icon svgIcon="instagram" class="w-4 h-4" aria-hidden="true"></mat-icon>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-2 pt-6 mt-8 text-sm border-t text-secondary-600 md:flex-row md:justify-between">
+			<div>© {{ currentYear }} Tecnogenco. Tutti i diritti riservati.</div>
+			<div class="flex gap-4">
+				<a routerLink="/privacy" class="hover:text-on-surface">Privacy</a>
+				<a routerLink="/terms" class="hover:text-on-surface">Termini</a>
+			</div>
+		</div>
+	</div>
+</footer>
