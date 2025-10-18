@@ -5,9 +5,10 @@
       <div class="relative min-h-72 -mx-1">
      <div class="absolute top-0 bottom-0 left-0 flex flex-nowrap cursor-grab" [ngClass]="{'transition-transform': animate}" [style.transitionDuration.ms]="animate ? transitionDurationMs : 0" [style.transform]="'translateX(calc(-' + (currentIndex * (cardWidth + gap)) + 'px + ' + dragOffset + 'px))'" [style.gap.px]="gap"
        (pointerdown)="onPointerDown($event)" (pointermove)="onPointerMove($event)" (pointerup)="onPointerUp($event)" (pointercancel)="onPointerCancel($event)" style="touch-action: pan-y;">
-          <div class="flex-none px-1 min-w-0" *ngFor="let photo of duplicatedPhotos; trackBy: trackByPhotoId" [style.width.px]="cardWidth" [style.min-width.px]="cardWidth" [style.max-width.px]="cardWidth">
+          <div class="flex-none px-1 min-w-0" *ngFor="let photo of duplicatedPhotos; let di = index; trackBy: trackByPhotoId" [style.width.px]="cardWidth" [style.min-width.px]="cardWidth" [style.max-width.px]="cardWidth">
             <div class="flex justify-center h-full bg-gray-100 p-6 w-full min-w-0 overflow-hidden" [style.height.px]="cardHeight">
-              <img [src]="photo.source" [alt]="photo.name || 'Foto Tecnogenco'" loading="lazy" class="object-cover w-full h-full rounded-lg min-w-0 md:shadow-lg" (error)="onImageError($event, photo)" draggable="false" (dragstart)="$event.preventDefault()" />
+        <img [src]="photo.source" [alt]="photo.name || 'Foto Tecnogenco'" loading="lazy" class="object-cover w-full h-full rounded-lg min-w-0 md:shadow-lg" (error)="onImageError($event, photo)" draggable="false" (dragstart)="$event.preventDefault()"
+                   (pointerdown)="onImagePointerDown($event, di)" (pointerup)="onImagePointerUp($event, di)" />
             </div>
           </div>
         </div>
@@ -30,6 +31,9 @@
     </div>
   </div>
 </div>
+
+<!-- Lightbox -->
+<app-lightbox *ngIf="lightboxOpen" [images]="photos" [startIndex]="lightboxStartIndex" (close)="onLightboxClose()"></app-lightbox>
 
 <div class="flex flex-col items-center justify-center py-16 px-8 text-secondary-600" *ngIf="photos.length === 0 && !error">
   <div class="w-12 h-12 border-4 border-secondary-200 border-t-primary-500 rounded-full animate-spin mb-4"></div>

@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, OnDestroy, HostListener, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LightboxComponent } from '../lightbox/lightbox.component';
 import { LocalPhoto } from '../../../../core/services/data.service';
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LightboxComponent],
   templateUrl: './carousel.component.html'
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -37,11 +38,59 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   dragStartX = 0;
   dragOffset = 0; // px
   private dragThreshold = 0; // calculated once cardWidth known
+  // pointer state to detect start vs candidate
+  private pointerDown = false;
+  private pointerMoveThreshold = 6; // px before starting actual drag
   // For velocity-based (inertia) swipe
   private dragStartTime = 0;
   private lastMoveX = 0;
   private lastMoveTime = 0;
   private velocityThreshold = 0.5; // px per ms (500 px/s)
+
+  // Lightbox state
+  lightboxOpen = false;
+  lightboxStartIndex = 0;
+  // ensure imported standalone component is considered used by static analysis
+  private _ensureLightboxUsed: any = LightboxComponent;
+  // click-vs-drag detection for opening lightbox
+  private clickTimer?: number;
+  private clickStartX = 0;
+  private clickStartY = 0;
+  private readonly clickThresholdMs = 200; // max duration to consider a click
+  private readonly clickMoveThreshold = 8; // px max movement to consider a click
+  private candidateImageIndex: number | null = null;
+
+  openLightbox(idx: number) {
+    this.lightboxStartIndex = idx - this.padCount;
+    this.lightboxOpen = true;
+  }
+
+  onLightboxClose() {
+    this.lightboxOpen = false;
+  }
+
+  onImagePointerDown(evt: PointerEvent, di: number) {
+    // record start for click detection
+    this.clickStartX = evt.clientX;
+    this.clickStartY = evt.clientY;
+    // start timer
+    this.clickTimer = window.setTimeout(() => {
+      // timeout expired -> not a quick click
+      if (this.clickTimer) {
+        clearTimeout(this.clickTimer);
+        this.clickTimer = undefined;
+      }
+    }, this.clickThresholdMs);
+    // mark candidate image index (use duplicated index)
+    this.candidateImageIndex = di;
+  }
+
+  onImagePointerUp(evt: PointerEvent, di: number) {
+    // If pointerup happens on the image, we still rely on the central onPointerUp which has pointer capture
+    // so here just clear timer and candidate to avoid duplicate actions.
+    if (this.clickTimer) { clearTimeout(this.clickTimer); this.clickTimer = undefined; }
+    // do not open here; opening happens in onPointerUp for reliability
+  }
 
   private normalizeIndex(idx: number): number {
     const n = this.photos.length;
@@ -230,11 +279,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   // Pointer / touch handlers
   onPointerDown(event: PointerEvent) {
     if (this.isTransitioning) return;
-    this.isDragging = true;
-    this.animate = false;
+    // mark pointer down but don't start dragging until movement exceeds threshold
+    this.pointerDown = true;
+    this.isDragging = false;
     this.dragStartX = event.clientX;
     this.dragOffset = 0;
-    // Capture pointer to receive move/up outside the element (use currentTarget to target the track)
     try { (event.currentTarget as Element).setPointerCapture(event.pointerId); } catch {}
     this.dragStartTime = performance.now();
     this.lastMoveX = event.clientX;
@@ -242,8 +291,18 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   onPointerMove(event: PointerEvent) {
-    if (!this.isDragging) return;
+    if (!this.pointerDown) return;
     const dx = event.clientX - this.dragStartX;
+    // if not yet dragging, check threshold to start
+    if (!this.isDragging) {
+      if (Math.abs(dx) > this.pointerMoveThreshold) {
+        this.isDragging = true;
+        this.animate = false;
+      } else {
+        return;
+      }
+    }
+
     this.dragOffset = dx;
     // track velocity
     this.lastMoveX = event.clientX;
@@ -251,8 +310,26 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   onPointerUp(event: PointerEvent) {
-    if (!this.isDragging) return;
+    if (!this.pointerDown) return;
+
+    // If dragging wasn't started, treat as a click candidate.
+    if (!this.isDragging) {
+      // compute movement
+      const dxClick = Math.abs(event.clientX - this.clickStartX);
+      const dyClick = Math.abs(event.clientY - this.clickStartY);
+      const moved = Math.sqrt(dxClick * dxClick + dyClick * dyClick);
+      if (moved <= this.clickMoveThreshold && this.candidateImageIndex !== null) {
+        // open lightbox for the candidate image
+        this.openLightbox(this.candidateImageIndex);
+      }
+      this.pointerDown = false;
+      this.candidateImageIndex = null;
+      if (this.clickTimer) { clearTimeout(this.clickTimer); this.clickTimer = undefined; }
+      return;
+    }
+
     this.isDragging = false;
+    this.pointerDown = false;
     this.animate = true;
     const dx = event.clientX - this.dragStartX;
     // compute velocity (px per ms)
