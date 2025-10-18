@@ -29,8 +29,53 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   isTransitioning = false;
   // Control whether the transform uses CSS transition
   animate = true;
+  transitionDurationMs = 500;
   indicatorArray: number[] = [];
   currentIndicator = 0;
+  // Drag/swipe state
+  isDragging = false;
+  dragStartX = 0;
+  dragOffset = 0; // px
+  private dragThreshold = 0; // calculated once cardWidth known
+  // For velocity-based (inertia) swipe
+  private dragStartTime = 0;
+  private lastMoveX = 0;
+  private lastMoveTime = 0;
+  private velocityThreshold = 0.5; // px per ms (500 px/s)
+
+  private normalizeIndex(idx: number): number {
+    const n = this.photos.length;
+    if (n === 0) return idx;
+    const rel = ((idx - this.padCount) % n + n) % n;
+    return rel + this.padCount;
+  }
+
+  private animateToIndex(targetIndex: number) {
+    if (this.isTransitioning) return;
+    this.isTransitioning = true;
+    // clamp targetIndex within possible duplicated range first (allow overflow)
+    this.currentIndex = targetIndex;
+    this.updateIndicators();
+    this.resetAutoPlay();
+
+    // After the transition, normalize index to the real range without animation
+    setTimeout(() => {
+      // If out of the logical real range, normalize and disable animation briefly
+      const min = this.padCount;
+      const max = this.photos.length + this.padCount - 1;
+      if (this.currentIndex < min || this.currentIndex > max) {
+        this.animate = false;
+        this.currentIndex = this.normalizeIndex(this.currentIndex);
+        this.updateIndicators();
+        // re-enable animation next frame
+        requestAnimationFrame(() => {
+          void (document.querySelector('.carousel-track-container') as HTMLElement)?.offsetHeight;
+          this.animate = true;
+        });
+      }
+      this.isTransitioning = false;
+    }, this.transitionDurationMs + 20);
+  }
 
   ngOnInit() {
     // createDuplicatedPhotos will be called also from ngOnChanges when input arrives
@@ -178,6 +223,81 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     this.cardWidth = Math.floor((availableWidth - totalGap) / this.visibleCount);
     // Card height based on ratio or fixed height (use 3:2 ratio)
     this.cardHeight = Math.floor(this.cardWidth * 0.66);
+    // Set drag threshold to a fraction of card width (e.g., 25%)
+    this.dragThreshold = Math.max(20, Math.floor(this.cardWidth * 0.25));
+  }
+
+  // Pointer / touch handlers
+  onPointerDown(event: PointerEvent) {
+    if (this.isTransitioning) return;
+    this.isDragging = true;
+    this.animate = false;
+    this.dragStartX = event.clientX;
+    this.dragOffset = 0;
+    // Capture pointer to receive move/up outside the element (use currentTarget to target the track)
+    try { (event.currentTarget as Element).setPointerCapture(event.pointerId); } catch {}
+    this.dragStartTime = performance.now();
+    this.lastMoveX = event.clientX;
+    this.lastMoveTime = this.dragStartTime;
+  }
+
+  onPointerMove(event: PointerEvent) {
+    if (!this.isDragging) return;
+    const dx = event.clientX - this.dragStartX;
+    this.dragOffset = dx;
+    // track velocity
+    this.lastMoveX = event.clientX;
+    this.lastMoveTime = performance.now();
+  }
+
+  onPointerUp(event: PointerEvent) {
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    this.animate = true;
+    const dx = event.clientX - this.dragStartX;
+    // compute velocity (px per ms)
+    const now = performance.now();
+    const dt = Math.max(1, now - this.lastMoveTime);
+    const dxVel = (event.clientX - this.lastMoveX) / dt; // px per ms
+
+    try { (event.currentTarget as Element).releasePointerCapture(event.pointerId); } catch {}
+
+    // Determine how many cards the user has dragged across (positive = right)
+    const pxPerCard = this.cardWidth + this.gap;
+    // Negative dragOffset means left swipe -> advance
+    const totalPx = this.dragOffset;
+    // target displacement in number of cards (float)
+    const cardsDragged = -totalPx / pxPerCard;
+    // Base target index (allow fractions)
+    let targetIndexFloat = this.currentIndex + cardsDragged;
+
+    // Consider velocity (fling) to push one extra card in fling direction
+    if (dxVel < -this.velocityThreshold) {
+      // fast left fling -> advance one more
+      targetIndexFloat -= 0.6;
+    } else if (dxVel > this.velocityThreshold) {
+      // fast right fling -> go back one more
+      targetIndexFloat += 0.6;
+    }
+
+    // Round to nearest integer index to snap to the nearest card after release
+    const targetIndex = Math.round(targetIndexFloat);
+
+    // Set transition duration inversely proportional to velocity, capped
+    const absVel = Math.min(3, Math.abs(dxVel)); // px/ms cap
+    const baseMs = 300;
+    this.transitionDurationMs = Math.max(160, Math.round(baseMs / (0.5 + absVel)));
+
+    this.animateToIndex(targetIndex);
+
+    this.dragOffset = 0;
+  }
+
+  onPointerCancel(event: PointerEvent) {
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    this.animate = true;
+    this.dragOffset = 0;
   }
 
   private updateIndicators() {

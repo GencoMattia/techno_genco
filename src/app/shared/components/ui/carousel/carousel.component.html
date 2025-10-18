@@ -3,10 +3,11 @@
   <div class="relative">
   <div class="w-full overflow-hidden bg-white rounded-lg min-w-0 carousel-track-container">
       <div class="relative min-h-72 -mx-1">
-  <div class="absolute top-0 bottom-0 left-0 flex flex-nowrap cursor-grab" [ngClass]="{'transition-transform duration-500': animate}" [style.transform]="'translateX(-' + (currentIndex * (cardWidth + gap)) + 'px)'" [style.gap.px]="gap">
+     <div class="absolute top-0 bottom-0 left-0 flex flex-nowrap cursor-grab" [ngClass]="{'transition-transform': animate}" [style.transitionDuration.ms]="animate ? transitionDurationMs : 0" [style.transform]="'translateX(calc(-' + (currentIndex * (cardWidth + gap)) + 'px + ' + dragOffset + 'px))'" [style.gap.px]="gap"
+       (pointerdown)="onPointerDown($event)" (pointermove)="onPointerMove($event)" (pointerup)="onPointerUp($event)" (pointercancel)="onPointerCancel($event)" style="touch-action: pan-y;">
           <div class="flex-none px-1 min-w-0" *ngFor="let photo of duplicatedPhotos; trackBy: trackByPhotoId" [style.width.px]="cardWidth" [style.min-width.px]="cardWidth" [style.max-width.px]="cardWidth">
             <div class="flex justify-center h-full bg-gray-100 p-6 w-full min-w-0 overflow-hidden" [style.height.px]="cardHeight">
-              <img [src]="photo.source" [alt]="photo.name || 'Foto Tecnogenco'" loading="lazy" class="object-cover w-full h-full rounded-lg min-w-0 md:shadow-lg" (error)="onImageError($event, photo)" />
+              <img [src]="photo.source" [alt]="photo.name || 'Foto Tecnogenco'" loading="lazy" class="object-cover w-full h-full rounded-lg min-w-0 md:shadow-lg" (error)="onImageError($event, photo)" draggable="false" (dragstart)="$event.preventDefault()" />
             </div>
           </div>
         </div>
