@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocalPhoto } from '../../../../core/services/data.service';
 
@@ -10,17 +10,27 @@ import { LocalPhoto } from '../../../../core/services/data.service';
   styleUrls: ['./lightbox.component.scss']
 })
 export class LightboxComponent {
-  @Input() images: LocalPhoto[] = [];
-  @Input() startIndex = 0;
+  // keep @Input compatibility but use internal signals
+  private imagesSignal: WritableSignal<LocalPhoto[]> = signal<LocalPhoto[]>([]);
+  @Input()
+  set images(v: LocalPhoto[] | undefined) { this.imagesSignal.set(v || []); }
+  get images(): LocalPhoto[] { return this.imagesSignal(); }
+
+  // expose images for template as a function so template can call it when needed
+  imagesList(): LocalPhoto[] { return this.imagesSignal(); }
+
+  @Input()
+  set startIndex(v: number) { this.open(v); }
+
   @Output() close = new EventEmitter<void>();
 
-  currentIndex = 0;
-  isOpen = false;
+  currentIndex: WritableSignal<number> = signal(0);
+  isOpen: WritableSignal<boolean> = signal(false);
 
-  // zoom state
-  scale = 1;
-  translateX = 0;
-  translateY = 0;
+  // zoom state as signals
+  scale: WritableSignal<number> = signal(1);
+  translateX: WritableSignal<number> = signal(0);
+  translateY: WritableSignal<number> = signal(0);
 
   // pointers
   private pointers = new Map<number, { x: number; y: number; time: number }>();
@@ -38,11 +48,11 @@ export class LightboxComponent {
   }
 
   open(idx = 0) {
-    this.currentIndex = idx;
-    this.isOpen = true;
-    this.scale = 1;
-    this.translateX = 0;
-    this.translateY = 0;
+  this.currentIndex.set(idx);
+  this.isOpen.set(true);
+  this.scale.set(1);
+  this.translateX.set(0);
+  this.translateY.set(0);
     // lock scroll
     document.body.style.overflow = 'hidden';
 
@@ -51,7 +61,7 @@ export class LightboxComponent {
   }
 
   getCurrentHighResSrc(): string | undefined {
-    const p = this.images[this.currentIndex];
+    const p = this.imagesSignal()[this.currentIndex()];
     return (p as any).full || (p as any).fullsize || (p as any).highRes || (p as any).srcset || p?.source;
   }
 
@@ -68,32 +78,32 @@ export class LightboxComponent {
   }
 
   closeLightbox() {
-    this.isOpen = false;
+    this.isOpen.set(false);
     this.close.emit();
     document.body.style.overflow = '';
   }
 
   next() {
-    if (this.images.length === 0) return;
-    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    if (this.imagesSignal().length === 0) return;
+    this.currentIndex.update(v => (v + 1) % this.imagesSignal().length);
     this.resetTransform();
   }
 
   previous() {
-    if (this.images.length === 0) return;
-    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    if (this.imagesSignal().length === 0) return;
+    this.currentIndex.update(v => (v - 1 + this.imagesSignal().length) % this.imagesSignal().length);
     this.resetTransform();
   }
 
   private resetTransform() {
-    this.scale = 1;
-    this.translateX = 0;
-    this.translateY = 0;
+    this.scale.set(1);
+    this.translateX.set(0);
+    this.translateY.set(0);
   }
 
   @HostListener('window:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-    if (!this.isOpen) return;
+    if (!this.isOpen()) return;
     if (event.key === 'Escape') this.closeLightbox();
     if (event.key === 'ArrowRight') this.next();
     if (event.key === 'ArrowLeft') this.previous();
@@ -113,23 +123,23 @@ export class LightboxComponent {
     if (this.pointers.size === 2) {
       const pts = Array.from(this.pointers.values());
       this.initialPinchDistance = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-      this.initialScale = this.scale;
+      this.initialScale = this.scale();
     }
   }
 
   onPointerMove(evt: PointerEvent) {
-    if (!this.pointers.has(evt.pointerId)) return;
-    this.pointers.set(evt.pointerId, { x: evt.clientX, y: evt.clientY, time: performance.now() });
+  if (!this.pointers.has(evt.pointerId)) return;
+  this.pointers.set(evt.pointerId, { x: evt.clientX, y: evt.clientY, time: performance.now() });
 
     if (this.pointers.size === 1) {
       // pan
-      if (this.scale <= 1) return; // no panning when not zoomed
+      if (this.scale() <= 1) return; // no panning when not zoomed
       const p = this.pointers.get(evt.pointerId)!;
       const dx = evt.clientX - p.x;
       const dy = evt.clientY - p.y;
       // apply deltas
-      this.translateX += dx;
-      this.translateY += dy;
+      this.translateX.update(v => v + dx);
+      this.translateY.update(v => v + dy);
       // update stored point to avoid jump
       this.pointers.set(evt.pointerId, { x: evt.clientX, y: evt.clientY, time: performance.now() });
     } else if (this.pointers.size === 2) {
@@ -137,7 +147,7 @@ export class LightboxComponent {
       const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       if (this.initialPinchDistance > 0) {
         const ratio = d / this.initialPinchDistance;
-        this.scale = Math.max(this.minScale, Math.min(this.maxScale, this.initialScale * ratio));
+        this.scale.set(Math.max(this.minScale, Math.min(this.maxScale, this.initialScale * ratio)));
       }
     }
   }
@@ -146,18 +156,19 @@ export class LightboxComponent {
     try { (evt.target as Element).releasePointerCapture(evt.pointerId); } catch {}
     this.pointers.delete(evt.pointerId);
     // clamp translate when scale <=1
-    if (this.scale <= 1) this.resetTransform();
+    if (this.scale() <= 1) this.resetTransform();
   }
 
   onPointerCancel(evt: PointerEvent) {
     try { (evt.target as Element).releasePointerCapture(evt.pointerId); } catch {}
     this.pointers.clear();
-    if (this.scale <= 1) this.resetTransform();
+    if (this.scale() <= 1) this.resetTransform();
   }
 
   // double click fallback for non-touch
   onImageDblClick() {
-    this.scale = this.scale > 1 ? 1 : 2;
-    if (this.scale === 1) this.resetTransform();
+    const next = this.scale() > 1 ? 1 : 2;
+    this.scale.set(next);
+    if (next === 1) this.resetTransform();
   }
 }
