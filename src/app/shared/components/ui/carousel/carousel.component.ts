@@ -27,6 +27,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   padCount = 0;
   duplicatedPhotos: LocalPhoto[] = [];
   isTransitioning = false;
+  // Control whether the transform uses CSS transition
+  animate = true;
   indicatorArray: number[] = [];
   currentIndicator = 0;
 
@@ -96,8 +98,17 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     setTimeout(() => {
       if (this.currentIndex >= this.photos.length + this.padCount) {
+        // We've moved into the cloned slides at the end. Jump back to the
+        // real first slide without animation to make loop appear seamless.
+        this.animate = false;
         this.currentIndex = this.padCount;
         this.updateIndicators();
+        // Re-enable animation on the next frame
+        requestAnimationFrame(() => {
+          // Force reflow before re-enabling
+          void (document.querySelector('.carousel-track-container') as HTMLElement)?.offsetHeight;
+          this.animate = true;
+        });
       }
       this.isTransitioning = false;
     }, 500);
@@ -112,8 +123,15 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     setTimeout(() => {
       if (this.currentIndex < 0) {
+        // We've moved into the cloned slides at the beginning. Jump to the
+        // corresponding real slide at the end without animation.
+        this.animate = false;
         this.currentIndex = this.photos.length + this.padCount - 1;
         this.updateIndicators();
+        requestAnimationFrame(() => {
+          void (document.querySelector('.carousel-track-container') as HTMLElement)?.offsetHeight;
+          this.animate = true;
+        });
       }
       this.isTransitioning = false;
     }, 500);
