@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../ui/card/card.component';
 import { PrimaryButtonComponent } from '../buttons/primary-button/primary-button.component';
@@ -23,8 +23,19 @@ import { PrimaryButtonComponent } from '../buttons/primary-button/primary-button
   styles: [``]
 })
 export class ProfileCardComponent {
-  @Input() name = '';
-  @Input() role = '';
-  @Input() bio = '';
-  @Input() image = '';
+  private _name: WritableSignal<string> = signal('');
+  @Input() set name(v: string) { this._name.set(v || ''); }
+  get name() { return this._name(); }
+
+  private _role: WritableSignal<string> = signal('');
+  @Input() set role(v: string) { this._role.set(v || ''); }
+  get role() { return this._role(); }
+
+  private _bio: WritableSignal<string> = signal('');
+  @Input() set bio(v: string) { this._bio.set(v || ''); }
+  get bio() { return this._bio(); }
+
+  private _image: WritableSignal<string> = signal('');
+  @Input() set image(v: string) { this._image.set(v || ''); }
+  get image() { return this._image(); }
 }

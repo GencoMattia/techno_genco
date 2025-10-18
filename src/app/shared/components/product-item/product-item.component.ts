@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PrimaryButtonComponent } from '../buttons/primary-button/primary-button.component';
 
@@ -26,10 +26,28 @@ import { PrimaryButtonComponent } from '../buttons/primary-button/primary-button
   styles: [``]
 })
 export class ProductItemComponent {
-  @Input() title = '';
-  @Input() subtitle?: string;
-  @Input() description = '';
-  @Input() image = '';
-  @Input() alt?: string;
-  @Input() reverse = false; // when true, image is on the right for md+
+  // keep public inputs but sync into signals for template-friendly reactive reads
+  private _title: WritableSignal<string> = signal('');
+  @Input() set title(v: string) { this._title.set(v || ''); }
+  get title() { return this._title(); }
+
+  private _subtitle: WritableSignal<string | undefined> = signal(undefined as any);
+  @Input() set subtitle(v: string | undefined) { this._subtitle.set(v); }
+  get subtitle() { return this._subtitle(); }
+
+  private _description: WritableSignal<string> = signal('');
+  @Input() set description(v: string) { this._description.set(v || ''); }
+  get description() { return this._description(); }
+
+  private _image: WritableSignal<string> = signal('');
+  @Input() set image(v: string) { this._image.set(v || ''); }
+  get image() { return this._image(); }
+
+  private _alt: WritableSignal<string | undefined> = signal(undefined as any);
+  @Input() set alt(v: string | undefined) { this._alt.set(v); }
+  get alt() { return this._alt(); }
+
+  private _reverse: WritableSignal<boolean> = signal(false);
+  @Input() set reverse(v: boolean) { this._reverse.set(!!v); }
+  get reverse() { return this._reverse(); }
 }
