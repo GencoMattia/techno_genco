@@ -25,8 +25,9 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   @Input() autoPlay = true;
   @Input() autoPlayInterval = 7000;
 
-  error = false;
-  errorMessage = 'Impossibile caricare le foto. Riprova più tardi.';
+  // migrate error state to Signals so template @if() reacts
+  error: WritableSignal<boolean> = signal(false);
+  errorMessage: WritableSignal<string> = signal('Impossibile caricare le foto. Riprova più tardi.');
   gap = 16;
 
   private autoPlayTimer?: number;
@@ -48,6 +49,14 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     const idx = this.currentIndex() - this.padCount();
     return ((idx % photos.length) + photos.length) % photos.length;
   });
+  // expose index arrays as computed signals so @for can iterate without arrow functions in template
+  duplicatedPhotoIndices: Signal<number[]> = computed(() => this.duplicatedPhotos().map((_, i) => i));
+  indicatorIndices: Signal<number[]> = computed(() => this.indicatorArray());
+  // expose duplicated photos directly for template control-flow
+  photosForTemplate: Signal<LocalPhoto[]> = computed(() => this.duplicatedPhotos());
+  // helper computed used in templates
+  hasPhotos: Signal<boolean> = computed(() => this.photosSignal().length > 0);
+  isLoading: Signal<boolean> = computed(() => this.photosSignal().length === 0 && !this.error());
   // Drag/swipe state
   isDragging = false; // local flag (not a signal since transient)
   dragStartX = 0;
@@ -62,8 +71,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private lastMoveTime = 0;
   private velocityThreshold = 0.5; // px per ms (500 px/s)
 
-  // Lightbox state
-  lightboxOpen = false;
+  // Lightbox state (signal-backed)
+  lightboxOpen: WritableSignal<boolean> = signal(false);
   lightboxStartIndex = 0;
   // ensure imported standalone component is considered used by static analysis
   private _ensureLightboxUsed: any = LightboxComponent;
@@ -77,11 +86,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   openLightbox(idx: number) {
     this.lightboxStartIndex = idx - this.padCount();
-    this.lightboxOpen = true;
+    this.lightboxOpen.set(true);
   }
 
   onLightboxClose() {
-    this.lightboxOpen = false;
+    this.lightboxOpen.set(false);
   }
 
   onImagePointerDown(evt: PointerEvent, di: number) {
@@ -173,8 +182,8 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     } else {
       // Se fallisce anche il secondo tentativo, mostra placeholder
       img.style.display = 'none';
-      this.error = true;
-      this.errorMessage = `Impossibile caricare l'immagine: ${photo.name || photo.id}`;
+      this.error.set(true);
+      this.errorMessage.set(`Impossibile caricare l'immagine: ${photo.name || photo.id}`);
     }
   }
 
@@ -185,6 +194,11 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   trackByPhotoId(index: number, photo: LocalPhoto): string {
     return photo.id;
+  }
+
+  // track by index for simple numeric arrays used by template control-flow
+  trackByIndex(index: number, _value: any) {
+    return index;
   }
 
   nextSlide() {
