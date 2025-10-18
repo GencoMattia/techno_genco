@@ -13,6 +13,7 @@ import { SecondaryButtonComponent } from '../../shared/components/buttons/second
 })
 export class HeaderComponent {
   mobileOpen = false;
+  logoUrl = 'assets/logo.jpg';
 
   toggleMobile() {
     this.mobileOpen = !this.mobileOpen;

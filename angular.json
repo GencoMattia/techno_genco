@@ -44,6 +44,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/techno_genco/",
               "budgets": [
                 {
                   "type": "initial",

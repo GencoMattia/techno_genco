@@ -29,7 +29,7 @@ export class DataService {
     while (index <= maxPhotos) {
       const photo: LocalPhoto = {
         id: `foto_${index}`,
-        source: `/assets/foto_${index}.jpg`, // Aggiungi lo slash iniziale
+        source: `assets/foto_${index}.jpg`, // Path relativo senza slash iniziale
         name: this.getPhotoTitle(index),
         description: this.getPhotoDescription(index)
       };
