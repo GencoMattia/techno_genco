@@ -1,0 +1,25 @@
+@if (isOpen()) {
+  <div class="lightbox-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" (click)="onBackdropClick($event)">
+    <div class="lightbox-content relative max-w-screen max-h-screen flex items-center justify-center">
+    <button class="lb-arrow lb-prev absolute left-4 top-1/2 transform -translate-y-1/2 text-white/90 p-2" (click)="previous()" aria-label="Previous">
+      ‹
+    </button>
+
+      <div class="max-w-full max-h-full p-4">
+        <div class="lb-viewport overflow-hidden max-h-[80vh] flex items-center justify-center">
+          <img [src]="getCurrentHighResSrc() || imagesList()[currentIndex()].source" [alt]="imagesList()[currentIndex()].name || 'Preview'" class="lightbox-image block mx-auto"
+               (dblclick)="onImageDblClick(); $event.stopPropagation()"
+               (pointerdown)="$event.stopPropagation(); onPointerDown($event)" (pointermove)="$event.stopPropagation(); onPointerMove($event)" (pointerup)="$event.stopPropagation(); onPointerUp($event)" (pointercancel)="$event.stopPropagation(); onPointerCancel($event)"
+               [style.transform]="'translate(' + translateX() + 'px,' + translateY() + 'px) scale(' + scale() + ')'" draggable="false" (dragstart)="$event.preventDefault()" />
+        </div>
+        <div class="mt-2 text-center text-white/90">{{ currentIndex() + 1 }} / {{ imagesList().length }}</div>
+      </div>
+
+    <button class="lb-arrow lb-next absolute right-4 top-1/2 transform -translate-y-1/2 text-white/90 p-2" (click)="next()" aria-label="Next">
+      ›
+    </button>
+
+    <button class="absolute right-4 top-4 text-white/90 p-2" (click)="closeLightbox()" aria-label="Close">✕</button>
+  </div>
+  </div>
+}

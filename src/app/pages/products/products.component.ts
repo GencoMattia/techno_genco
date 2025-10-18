@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, computed, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductItemComponent } from '../../shared/components/product-item/product-item.component';
 
@@ -19,8 +19,8 @@ interface Product {
       <h1 class="text-3xl font-bold mb-8">Prodotti</h1>
 
       <div class="space-y-12">
-        <ng-container *ngFor="let p of products; let i = index">
-          <app-product-item [title]="p.title" [subtitle]="p.subtitle" [description]="p.description" [image]="p.image" [alt]="p.title" [reverse]="i % 2 === 1"></app-product-item>
+        <ng-container *ngFor="let entry of entriesForTemplate(); trackBy: trackByEntry">
+          <app-product-item [title]="entry.item.title" [subtitle]="entry.item.subtitle" [description]="entry.item.description" [image]="entry.item.image" [alt]="entry.item.title" [reverse]="entry.idx % 2 === 1"></app-product-item>
         </ng-container>
       </div>
     </section>
@@ -28,7 +28,8 @@ interface Product {
   styles: [``]
 })
 export class ProductsComponent {
-  products: Product[] = [
+  // migrate products to Signals for template-friendly control-flow
+  private productsSignal = signal<Product[]>([
     {
       id: 'p1',
       title: 'Macchina Industriale X1',
@@ -50,7 +51,17 @@ export class ProductsComponent {
       description: 'A3 è una soluzione modulare che permette upgrade progressivi minimizzando i downtime.',
       image: 'https://picsum.photos/seed/p3/800/600'
     }
-  ];
+  ]);
+
+  // expose for template
+  productsForTemplate: Signal<Product[]> = computed(() => this.productsSignal());
+  productIndices: Signal<number[]> = computed(() => this.productsSignal().map((_, i) => i));
+  // entries with stable track id for template iteration
+  entriesForTemplate = computed(() => this.productsSignal().map((item, i) => ({ item, idx: i, trackId: item.id })));
+
+  trackByEntry(index: number, entry: { item: Product; idx: number; trackId: string }) {
+    return entry.trackId;
+  }
 
   imageColClass(i: number) {
     // alternate image left/right on md+ screens

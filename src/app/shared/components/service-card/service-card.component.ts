@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -21,8 +21,15 @@ import { CommonModule } from '@angular/common';
   styles: [``]
 })
 export class ServiceCardComponent {
-  @Input() title = '';
-  @Input() description = '';
-  // Use Material icon ligature name (e.g., "settings", "developer_board")
-  @Input() icon = 'build';
+  private _title: WritableSignal<string> = signal('');
+  @Input() set title(v: string) { this._title.set(v || ''); }
+  get title() { return this._title(); }
+
+  private _description: WritableSignal<string> = signal('');
+  @Input() set description(v: string) { this._description.set(v || ''); }
+  get description() { return this._description(); }
+
+  private _icon: WritableSignal<string> = signal('build');
+  @Input() set icon(v: string) { this._icon.set(v || 'build'); }
+  get icon() { return this._icon(); }
 }

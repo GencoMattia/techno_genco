@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, computed, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileCardComponent } from '../../shared/components/profile-card/profile-card.component';
 
@@ -20,8 +20,8 @@ interface Person {
       <p class="text-secondary-600 mb-8">Scopri il nostro team e profili tecnici (personaggi fittizi a scopo demo).</p>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container *ngFor="let p of people">
-          <app-profile-card [name]="p.name" [role]="p.role" [bio]="p.bio" [image]="p.image"></app-profile-card>
+        <ng-container *ngFor="let entry of entriesForTemplate(); trackBy: trackByEntry">
+          <app-profile-card [name]="entry.item.name" [role]="entry.item.role" [bio]="entry.item.bio" [image]="entry.item.image"></app-profile-card>
         </ng-container>
       </div>
     </section>
@@ -29,12 +29,18 @@ interface Person {
   styles: [``]
 })
 export class ResourcesComponent {
-  people: Person[] = [
+  private peopleSignal = signal<Person[]>([
     { id: 'r1', name: 'Luca Romano', role: 'Ingegnere di processo', bio: 'Specialista in automazione e ottimizzazione di linee produttive.', image: 'https://i.pravatar.cc/150?img=12' },
     { id: 'r2', name: 'Giulia Ferri', role: 'Data Scientist', bio: 'Lavora su modelli predittivi e analisi dati per manutenzione.', image: 'https://i.pravatar.cc/150?img=32' },
     { id: 'r3', name: 'Marco Bianchi', role: 'Specialista IIoT', bio: 'Esperto in integrazione di sensori e protocolli industriali.', image: 'https://i.pravatar.cc/150?img=48' },
     { id: 'r4', name: 'Sara Conti', role: 'Project Manager', bio: 'Coordina progetti e interfaccia tra team tecnico e clienti.', image: 'https://i.pravatar.cc/150?img=5' },
     { id: 'r5', name: 'Davide Russo', role: 'Software Architect', bio: 'Progetta architetture scalabili per applicazioni industriali.', image: 'https://i.pravatar.cc/150?img=18' },
     { id: 'r6', name: 'Elena Moretti', role: 'UX Designer', bio: 'Si occupa di dashboard e visualizzazioni per operatori.', image: 'https://i.pravatar.cc/150?img=24' }
-  ];
+  ]);
+
+  entriesForTemplate = computed(() => this.peopleSignal().map((item, i) => ({ item, idx: i, trackId: item.id })));
+
+  trackByEntry(index: number, entry: { item: Person; idx: number; trackId: string }) {
+    return entry.trackId;
+  }
 }
