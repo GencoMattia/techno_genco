@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, HostListener, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostListener, AfterViewInit, OnChanges, SimpleChanges, signal, computed, WritableSignal, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LightboxComponent } from '../lightbox/lightbox.component';
 import { LocalPhoto } from '../../../../core/services/data.service';
@@ -10,7 +10,17 @@ import { LocalPhoto } from '../../../../core/services/data.service';
   templateUrl: './carousel.component.html'
 })
 export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
-  @Input() photos: LocalPhoto[] = [];
+  // use Signals for reactive state
+  private photosSignal: WritableSignal<LocalPhoto[]> = signal<LocalPhoto[]>([]);
+  // expose count for template use
+  get photosCount(): number { return this.photosSignal().length; }
+  @Input()
+  set photos(value: LocalPhoto[] | undefined) {
+    this.photosSignal.set(value || []);
+    this.createDuplicatedPhotos();
+    this.updateIndicators();
+  }
+  get photos(): LocalPhoto[] { return this.photosSignal(); }
   @Input() visibleCount = 3;
   @Input() autoPlay = true;
   @Input() autoPlayInterval = 7000;
@@ -21,22 +31,27 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   private autoPlayTimer?: number;
 
-  // New properties for single card scroll
-  currentIndex = 0;
-  cardWidth = 0;
-  cardHeight = 0;
-  padCount = 0;
-  duplicatedPhotos: LocalPhoto[] = [];
-  isTransitioning = false;
+  // New properties for single card scroll (Signals)
+  currentIndex: WritableSignal<number> = signal(0);
+  cardWidth: WritableSignal<number> = signal(0);
+  cardHeight: WritableSignal<number> = signal(0);
+  padCount: WritableSignal<number> = signal(0);
+  duplicatedPhotos: WritableSignal<LocalPhoto[]> = signal([]);
+  isTransitioning: WritableSignal<boolean> = signal(false);
   // Control whether the transform uses CSS transition
-  animate = true;
-  transitionDurationMs = 500;
-  indicatorArray: number[] = [];
-  currentIndicator = 0;
+  animate: WritableSignal<boolean> = signal(true);
+  transitionDurationMs: WritableSignal<number> = signal(500);
+  indicatorArray: Signal<number[]> = computed(() => Array.from({ length: this.photosSignal().length }, (_, i) => i));
+  currentIndicator: Signal<number> = computed(() => {
+    const photos = this.photosSignal();
+    if (photos.length === 0) return 0;
+    const idx = this.currentIndex() - this.padCount();
+    return ((idx % photos.length) + photos.length) % photos.length;
+  });
   // Drag/swipe state
-  isDragging = false;
+  isDragging = false; // local flag (not a signal since transient)
   dragStartX = 0;
-  dragOffset = 0; // px
+  dragOffset = 0; // px (transient)
   private dragThreshold = 0; // calculated once cardWidth known
   // pointer state to detect start vs candidate
   private pointerDown = false;
@@ -61,7 +76,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private candidateImageIndex: number | null = null;
 
   openLightbox(idx: number) {
-    this.lightboxStartIndex = idx - this.padCount;
+    this.lightboxStartIndex = idx - this.padCount();
     this.lightboxOpen = true;
   }
 
@@ -93,47 +108,44 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   private normalizeIndex(idx: number): number {
-    const n = this.photos.length;
+    const n = this.photosSignal().length;
     if (n === 0) return idx;
-    const rel = ((idx - this.padCount) % n + n) % n;
-    return rel + this.padCount;
+    const rel = ((idx - this.padCount()) % n + n) % n;
+    return rel + this.padCount();
   }
 
   private animateToIndex(targetIndex: number) {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-    // clamp targetIndex within possible duplicated range first (allow overflow)
-    this.currentIndex = targetIndex;
-    this.updateIndicators();
+    if (this.isTransitioning()) return;
+    this.isTransitioning.set(true);
+    // set target
+    this.currentIndex.set(targetIndex);
     this.resetAutoPlay();
 
     // After the transition, normalize index to the real range without animation
     setTimeout(() => {
-      // If out of the logical real range, normalize and disable animation briefly
-      const min = this.padCount;
-      const max = this.photos.length + this.padCount - 1;
-      if (this.currentIndex < min || this.currentIndex > max) {
-        this.animate = false;
-        this.currentIndex = this.normalizeIndex(this.currentIndex);
-        this.updateIndicators();
+      const min = this.padCount();
+      const max = this.photosSignal().length + this.padCount() - 1;
+      if (this.currentIndex() < min || this.currentIndex() > max) {
+        this.animate.set(false);
+        this.currentIndex.set(this.normalizeIndex(this.currentIndex()));
         // re-enable animation next frame
         requestAnimationFrame(() => {
           void (document.querySelector('.carousel-track-container') as HTMLElement)?.offsetHeight;
-          this.animate = true;
+          this.animate.set(true);
         });
       }
-      this.isTransitioning = false;
-    }, this.transitionDurationMs + 20);
+      this.isTransitioning.set(false);
+    }, this.transitionDurationMs() + 20);
   }
 
   ngOnInit() {
-    // createDuplicatedPhotos will be called also from ngOnChanges when input arrives
-    if (this.photos && this.photos.length) {
+    // createDuplicatedPhotos will be called from photos setter
+    if (this.photosSignal().length) {
       this.createDuplicatedPhotos();
-      this.updateIndicators();
+      // indicators are computed
     }
 
-    if (this.autoPlay && this.photos.length > 3) {
+    if (this.autoPlay && this.photosSignal().length > 3) {
       this.startAutoPlay();
     }
   }
@@ -144,15 +156,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['photos'] && !changes['photos'].firstChange) {
-      // Rebuild duplicated array and recalc sizes when photos input changes
-      this.createDuplicatedPhotos();
-      // Wait next frame for DOM to update
-      requestAnimationFrame(() => {
-        this.updateCardWidth();
-        this.updateIndicators();
-      });
-    }
+    // photos handled via setter; keep for other input changes if necessary
   }
 
   ngOnDestroy() {
@@ -184,84 +188,74 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   nextSlide() {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-    this.currentIndex++;
-    this.updateIndicators();
+    if (this.isTransitioning()) return;
+    this.isTransitioning.set(true);
+    this.currentIndex.update(v => v + 1);
     this.resetAutoPlay();
 
     setTimeout(() => {
-      if (this.currentIndex >= this.photos.length + this.padCount) {
-        // We've moved into the cloned slides at the end. Jump back to the
-        // real first slide without animation to make loop appear seamless.
-        this.animate = false;
-        this.currentIndex = this.padCount;
-        this.updateIndicators();
-        // Re-enable animation on the next frame
+      if (this.currentIndex() >= this.photosSignal().length + this.padCount()) {
+        this.animate.set(false);
+        this.currentIndex.set(this.padCount());
         requestAnimationFrame(() => {
-          // Force reflow before re-enabling
           void (document.querySelector('.carousel-track-container') as HTMLElement)?.offsetHeight;
-          this.animate = true;
+          this.animate.set(true);
         });
       }
-      this.isTransitioning = false;
+      this.isTransitioning.set(false);
     }, 500);
   }
 
   previousSlide() {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-    this.currentIndex--;
-    this.updateIndicators();
+    if (this.isTransitioning()) return;
+    this.isTransitioning.set(true);
+    this.currentIndex.update(v => v - 1);
     this.resetAutoPlay();
 
     setTimeout(() => {
-      if (this.currentIndex < 0) {
-        // We've moved into the cloned slides at the beginning. Jump to the
-        // corresponding real slide at the end without animation.
-        this.animate = false;
-        this.currentIndex = this.photos.length + this.padCount - 1;
-        this.updateIndicators();
+      if (this.currentIndex() < 0) {
+        this.animate.set(false);
+        this.currentIndex.set(this.photosSignal().length + this.padCount() - 1);
         requestAnimationFrame(() => {
           void (document.querySelector('.carousel-track-container') as HTMLElement)?.offsetHeight;
-          this.animate = true;
+          this.animate.set(true);
         });
       }
-      this.isTransitioning = false;
+      this.isTransitioning.set(false);
     }, 500);
   }
 
   goToIndicator(idx: number) {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-  this.currentIndex = this.padCount + idx;
-    this.updateIndicators();
+    if (this.isTransitioning()) return;
+    this.isTransitioning.set(true);
+    this.currentIndex.set(this.padCount() + idx);
     this.resetAutoPlay();
 
     setTimeout(() => {
-      this.isTransitioning = false;
+      this.isTransitioning.set(false);
     }, 500);
   }
 
   private createDuplicatedPhotos() {
-    if (this.photos.length === 0) {
-      this.duplicatedPhotos = [];
+    if (this.photosSignal().length === 0) {
+      this.duplicatedPhotos.set([]);
       return;
     }
 
     const pad = Math.min(this.visibleCount, 3);
     // Duplicate photos for infinite loop: last pad + all + first pad
-    this.duplicatedPhotos = [
-      ...this.photos.slice(-pad),
-      ...this.photos,
-      ...this.photos.slice(0, pad)
+    const dup = [
+      ...this.photosSignal().slice(-pad),
+      ...this.photosSignal(),
+      ...this.photosSignal().slice(0, pad)
     ];
-    this.padCount = pad;
-    this.currentIndex = this.padCount; // Start after the duplicates
+    this.duplicatedPhotos.set(dup);
+    this.padCount.set(pad);
+    this.currentIndex.set(this.padCount()); // Start after the duplicates
   }
 
   private updateCardWidth() {
-    if (this.photos.length === 0) return;
+    if (this.photosSignal().length === 0) return;
     const container = document.querySelector('.carousel-track-container') as HTMLElement;
     if (!container) return;
 
@@ -269,16 +263,17 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     // Calculate available width (container may have padding/margins outside)
     const availableWidth = containerWidth;
     const totalGap = this.gap * (this.visibleCount - 1);
-    this.cardWidth = Math.floor((availableWidth - totalGap) / this.visibleCount);
+    const cw = Math.floor((availableWidth - totalGap) / this.visibleCount);
+    this.cardWidth.set(cw);
     // Card height based on ratio or fixed height (use 3:2 ratio)
-    this.cardHeight = Math.floor(this.cardWidth * 0.66);
+    this.cardHeight.set(Math.floor(cw * 0.66));
     // Set drag threshold to a fraction of card width (e.g., 25%)
-    this.dragThreshold = Math.max(20, Math.floor(this.cardWidth * 0.25));
+    this.dragThreshold = Math.max(20, Math.floor(cw * 0.25));
   }
 
   // Pointer / touch handlers
   onPointerDown(event: PointerEvent) {
-    if (this.isTransitioning) return;
+    if (this.isTransitioning()) return;
     // mark pointer down but don't start dragging until movement exceeds threshold
     this.pointerDown = true;
     this.isDragging = false;
@@ -297,7 +292,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     if (!this.isDragging) {
       if (Math.abs(dx) > this.pointerMoveThreshold) {
         this.isDragging = true;
-        this.animate = false;
+        this.animate.set(false);
       } else {
         return;
       }
@@ -328,9 +323,9 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       return;
     }
 
-    this.isDragging = false;
-    this.pointerDown = false;
-    this.animate = true;
+  this.isDragging = false;
+  this.pointerDown = false;
+  this.animate.set(true);
     const dx = event.clientX - this.dragStartX;
     // compute velocity (px per ms)
     const now = performance.now();
@@ -339,14 +334,14 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     try { (event.currentTarget as Element).releasePointerCapture(event.pointerId); } catch {}
 
-    // Determine how many cards the user has dragged across (positive = right)
-    const pxPerCard = this.cardWidth + this.gap;
+  // Determine how many cards the user has dragged across (positive = right)
+  const pxPerCard = this.cardWidth() + this.gap;
     // Negative dragOffset means left swipe -> advance
     const totalPx = this.dragOffset;
     // target displacement in number of cards (float)
     const cardsDragged = -totalPx / pxPerCard;
     // Base target index (allow fractions)
-    let targetIndexFloat = this.currentIndex + cardsDragged;
+  let targetIndexFloat = this.currentIndex() + cardsDragged;
 
     // Consider velocity (fling) to push one extra card in fling direction
     if (dxVel < -this.velocityThreshold) {
@@ -358,14 +353,14 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
 
     // Round to nearest integer index to snap to the nearest card after release
-    const targetIndex = Math.round(targetIndexFloat);
+  const targetIndex = Math.round(targetIndexFloat);
 
     // Set transition duration inversely proportional to velocity, capped
-    const absVel = Math.min(3, Math.abs(dxVel)); // px/ms cap
-    const baseMs = 300;
-    this.transitionDurationMs = Math.max(160, Math.round(baseMs / (0.5 + absVel)));
+  const absVel = Math.min(3, Math.abs(dxVel)); // px/ms cap
+  const baseMs = 300;
+  this.transitionDurationMs.set(Math.max(160, Math.round(baseMs / (0.5 + absVel))));
 
-    this.animateToIndex(targetIndex);
+  this.animateToIndex(targetIndex);
 
     this.dragOffset = 0;
   }
@@ -373,13 +368,13 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   onPointerCancel(event: PointerEvent) {
     if (!this.isDragging) return;
     this.isDragging = false;
-    this.animate = true;
+    this.animate.set(true);
     this.dragOffset = 0;
   }
 
+  // indicators are computed via Signals (indicatorArray, currentIndicator)
   private updateIndicators() {
-    this.indicatorArray = Array.from({ length: this.photos.length }, (_, i) => i);
-    this.currentIndicator = (this.currentIndex - this.padCount + this.photos.length) % this.photos.length;
+    // no-op: kept for compatibility; indicatorArray/currentIndicator are computed
   }
 
   private startAutoPlay() {
@@ -397,7 +392,7 @@ export class CarouselComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   private resetAutoPlay() {
-    if (this.autoPlay && this.photos.length > 3) {
+    if (this.autoPlay && this.photosSignal().length > 3) {
       this.startAutoPlay();
     }
   }
