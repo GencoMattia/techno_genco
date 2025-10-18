@@ -13,5 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 export class FooterComponent {
   // Avoid using `new` expressions in templates; compute once here.
   currentYear = new Date().getFullYear();
+  logoUrl = 'assets/logo.jpg';
 }
 
