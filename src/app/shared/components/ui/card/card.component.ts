@@ -1,35 +1,25 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Surface card — dark `.card` primitive from the redesign handoff.
+ * Hover lifts the card and turns the border blue (global styles).
+ * `padding` overrides the default 28px where the design uses a different value.
+ */
 @Component({
   selector: 'app-card',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="card" [ngClass]="elevationClass">
+    <div class="card" [style.padding]="padding">
       <ng-content></ng-content>
     </div>
   `,
-  styles: [
-    `
-    .card {
-      background: var(--color-surface);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      border: 1px solid color-mix(in srgb, var(--color-secondary-100) 40%, transparent);
-      transition: box-shadow 0.2s ease;
-    }
-    .card.elevation-1 { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-    .card.elevation-2 { box-shadow: 0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12); }
-    .card.elevation-3 { box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.10); }
-    .card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    `
-  ]
+  styles: [':host { display: block; height: 100%; }', '.card { height: 100%; }']
 })
 export class CardComponent {
+  /** Kept for backward compatibility (no longer drives the shadow). */
   @Input() elevation: '1' | '2' | '3' = '1';
-
-  get elevationClass() {
-    return `elevation-${this.elevation}`;
-  }
+  /** Optional padding override, e.g. "34px", "30px", "36px". */
+  @Input() padding?: string;
 }

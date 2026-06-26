@@ -62,3 +62,24 @@ $tertiary-700: #176f2f;
 $tertiary-800: #114f21;
 $tertiary-900: #0b3114;
 
+// ============================================================
+// Redesign tokens — "dark / industrial" handoff (Tecnogenco)
+// Mapped 1:1 to the design handoff. These power the dark UI and
+// are exposed as CSS custom properties in `_redesign.scss` (and
+// consumed by `tailwind.config.js` via var(--token)).
+// ============================================================
+$bg:         #0a0e15; // sfondo pagina
+$bg2:        #0c111a; // sfondo footer, marquee, fasce
+$surf:       #10161f; // superficie card, input
+$surf2:      #141d29; // hover card, gradienti pannello
+$line:       rgba(255,255,255,.08); // bordi/divisori sottili
+$line2:      rgba(255,255,255,.14); // bordi più marcati, tag
+$tx:         #e8eef6; // testo primario
+$tx2:        #9aa8ba; // testo secondario / lead
+$tx3:        #5f6f82; // testo terziario / label mono
+$blue:       #3ba0e3; // primario: accenti, link attivi, CTA
+$blue2:      #2a86c8; // gradiente brand mark
+$blueglow:   rgba(59,160,227,.45); // glow/ombre blu
+$accent:     #f4a73a; // unico accento ambra
+$accentglow: rgba(244,167,58,.4);  // glow ambra
+

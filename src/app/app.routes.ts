@@ -22,8 +22,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/resources/resources.component').then(m => m.ResourcesComponent)
       },
       {
+        // "Chi siamo" now lives on the homepage; keep the old path working.
         path: 'about',
-        loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
+        redirectTo: '',
+        pathMatch: 'full'
       },
       {
         path: 'contact',

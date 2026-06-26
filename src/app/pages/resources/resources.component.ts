@@ -1,46 +1,66 @@
-import { Component, signal, computed, Signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ProfileCardComponent } from '../../shared/components/profile-card/profile-card.component';
-
-interface Person {
-  id: string;
-  name: string;
-  role: string;
-  bio: string;
-  image: string;
-}
+import { PrimaryButtonComponent } from '../../shared/components/buttons/primary-button/primary-button.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { DataService, TeamMember } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-resources',
   standalone: true,
-  imports: [CommonModule, ProfileCardComponent],
+  imports: [CommonModule, ProfileCardComponent, PrimaryButtonComponent, RevealDirective],
   template: `
-    <section class="container mx-auto py-12">
-      <h1 class="text-3xl font-bold mb-6">Risorse</h1>
-      <p class="text-secondary-600 mb-8">Scopri il nostro team e profili tecnici (personaggi fittizi a scopo demo).</p>
+    <div class="page">
+      <!-- Hero -->
+      <section class="sec-sm posrel ohide" style="padding-top:88px">
+        <div class="gridbg" style="opacity:.55"></div>
+        <div class="cont posrel" style="z-index:2">
+          <div class="kick" style="margin-bottom:18px">// Il team · 06 profili</div>
+          <h1 class="h1" style="font-size:clamp(40px,5.4vw,66px)">Risorse</h1>
+          <p class="lead" style="margin-top:22px;max-width:600px">Le persone dietro i progetti. Competenze tecniche e verticali, al servizio della tua produzione.</p>
+        </div>
+      </section>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container *ngFor="let entry of entriesForTemplate(); trackBy: trackByEntry">
-          <app-profile-card [name]="entry.item.name" [role]="entry.item.role" [bio]="entry.item.bio" [image]="entry.item.image"></app-profile-card>
-        </ng-container>
-      </div>
-    </section>
+      <!-- Team grid -->
+      <section class="cont" style="padding-bottom:104px">
+        <div class="g3">
+          <app-profile-card
+            *ngFor="let m of team; let i = index"
+            appReveal [ngClass]="d(i)"
+            [name]="m.name" [role]="m.role" [bio]="m.bio" [initials]="m.initials"></app-profile-card>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cont" style="padding-bottom:100px">
+        <div class="cta" appReveal style="padding:52px 46px">
+          <div class="gridbg" style="opacity:.5"></div>
+          <div class="posrel fx ac jb" style="z-index:2;flex-wrap:wrap;gap:26px">
+            <div style="max-width:520px">
+              <h2 class="h2" style="font-size:clamp(24px,2.6vw,34px);margin-bottom:10px">Vuoi lavorare con noi?</h2>
+              <p class="tx2" style="font-size:15px">Siamo sempre alla ricerca di talenti nell'automazione industriale.</p>
+            </div>
+            <app-primary-button [arrow]="true" ariaLabel="Scrivici" (click)="goContact()">Scrivici</app-primary-button>
+          </div>
+        </div>
+      </section>
+    </div>
   `,
-  styles: [``]
+  styles: [':host { display: block; }']
 })
 export class ResourcesComponent {
-  private peopleSignal = signal<Person[]>([
-    { id: 'r1', name: 'Luca Romano', role: 'Ingegnere di processo', bio: 'Specialista in automazione e ottimizzazione di linee produttive.', image: 'https://i.pravatar.cc/150?img=12' },
-    { id: 'r2', name: 'Giulia Ferri', role: 'Data Scientist', bio: 'Lavora su modelli predittivi e analisi dati per manutenzione.', image: 'https://i.pravatar.cc/150?img=32' },
-    { id: 'r3', name: 'Marco Bianchi', role: 'Specialista IIoT', bio: 'Esperto in integrazione di sensori e protocolli industriali.', image: 'https://i.pravatar.cc/150?img=48' },
-    { id: 'r4', name: 'Sara Conti', role: 'Project Manager', bio: 'Coordina progetti e interfaccia tra team tecnico e clienti.', image: 'https://i.pravatar.cc/150?img=5' },
-    { id: 'r5', name: 'Davide Russo', role: 'Software Architect', bio: 'Progetta architetture scalabili per applicazioni industriali.', image: 'https://i.pravatar.cc/150?img=18' },
-    { id: 'r6', name: 'Elena Moretti', role: 'UX Designer', bio: 'Si occupa di dashboard e visualizzazioni per operatori.', image: 'https://i.pravatar.cc/150?img=24' }
-  ]);
+  team: TeamMember[];
 
-  entriesForTemplate = computed(() => this.peopleSignal().map((item, i) => ({ item, idx: i, trackId: item.id })));
+  constructor(private router: Router, data: DataService) {
+    this.team = data.getTeam();
+  }
 
-  trackByEntry(index: number, entry: { item: Person; idx: number; trackId: string }) {
-    return entry.trackId;
+  d(i: number): string {
+    return 'd' + ((i % 4) + 1);
+  }
+
+  goContact(): void {
+    this.router.navigate(['/contact']);
   }
 }

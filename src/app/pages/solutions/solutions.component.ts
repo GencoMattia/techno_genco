@@ -1,55 +1,99 @@
-import { Component, signal, computed, Signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ServiceCardComponent } from '../../shared/components/service-card/service-card.component';
+import { Router } from '@angular/router';
+import { CardComponent } from '../../shared/components/ui/card/card.component';
 import { ProductItemComponent } from '../../shared/components/product-item/product-item.component';
-
-interface Solution {
-  id: string;
-  title: string;
-  description: string;
-  icon?: string;
-  image?: string;
-}
+import { PrimaryButtonComponent } from '../../shared/components/buttons/primary-button/primary-button.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { DataService, SolutionCard, SolutionRow } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-solutions',
   standalone: true,
-  imports: [CommonModule, ServiceCardComponent, ProductItemComponent],
+  imports: [CommonModule, CardComponent, ProductItemComponent, PrimaryButtonComponent, RevealDirective],
   template: `
-    <section class="container mx-auto py-12">
-      <h1 class="text-3xl font-bold mb-8">Soluzioni</h1>
+    <div class="page">
+      <!-- Hero -->
+      <section class="sec-sm posrel ohide" style="padding-top:88px">
+        <div class="gridbg" style="opacity:.55"></div>
+        <div class="cont posrel" style="z-index:2">
+          <div class="kick" style="margin-bottom:18px">// Soluzioni end-to-end</div>
+          <h1 class="h1" style="font-size:clamp(40px,5.4vw,66px)">Soluzioni</h1>
+          <p class="lead" style="margin-top:22px;max-width:600px">Dall'automazione di linea al monitoraggio remoto: progettiamo, integriamo e manteniamo i tuoi processi.</p>
+        </div>
+      </section>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <ng-container *ngFor="let entry of entriesHero(); trackBy: trackByEntry">
-          <app-service-card [title]="entry.item.title" [description]="entry.item.description" [icon]="entry.item.icon || 'settings'"></app-service-card>
-        </ng-container>
-      </div>
+      <!-- CORE cards -->
+      <section class="cont" style="padding-bottom:40px">
+        <div class="g2">
+          <app-card *ngFor="let s of cards; let i = index" padding="34px" appReveal [ngClass]="d(i)">
+            <div class="fx ac jb" style="margin-bottom:26px">
+              <span class="mono blue" style="font-size:13px;letter-spacing:.08em">{{ s.code }}</span>
+              <span class="mono tx3" style="font-size:11px">CORE</span>
+            </div>
+            <h3 class="h3" style="font-size:24px;margin-bottom:12px">{{ s.title }}</h3>
+            <p class="tx2" style="font-size:15px;line-height:1.62">{{ s.description }}</p>
+          </app-card>
+        </div>
+      </section>
 
-      <div class="space-y-12">
-        <ng-container *ngFor="let entry of entriesForTemplate(); trackBy: trackByEntry">
-          <app-product-item [title]="entry.item.title" [subtitle]="''" [description]="entry.item.description" [image]="entry.item.image || 'https://picsum.photos/seed/default/800/600'" [alt]="entry.item.title" [reverse]="entry.idx % 2 === 1"></app-product-item>
-        </ng-container>
-      </div>
-    </section>
+      <!-- Specialist service rows -->
+      <section class="cont" style="padding:60px 0 104px">
+        <div class="fx ac gap12" appReveal style="margin-bottom:54px">
+          <span class="kick">// Servizi specialistici</span>
+          <span class="f1 bt" style="height:1px"></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:84px">
+          <app-product-item
+            *ngFor="let p of rows; let i = index"
+            [code]="p.code"
+            kicker="// Soluzione"
+            [title]="p.title"
+            [description]="p.description"
+            [specs]="p.specs"
+            [image]="p.image"
+            [imageCode]="p.code"
+            [reverse]="i % 2 === 1"
+            imageHeight="360px"
+            tagFont="14px"
+            titleSize="clamp(26px,2.8vw,36px)"
+            ctaLabel="Scopri di più"
+            ctaVariant="secondary"
+            (cta)="goContact()"></app-product-item>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cont" style="padding-bottom:100px">
+        <div class="cta" appReveal style="padding:52px 46px">
+          <div class="gridbg" style="opacity:.5"></div>
+          <div class="posrel fx ac jb" style="z-index:2;flex-wrap:wrap;gap:26px">
+            <div style="max-width:520px">
+              <h2 class="h2" style="font-size:clamp(24px,2.6vw,34px);margin-bottom:10px">Pronto a ottimizzare i tuoi processi?</h2>
+              <p class="tx2" style="font-size:15px">Analizziamo insieme il tuo impianto e individuiamo i margini di miglioramento.</p>
+            </div>
+            <app-primary-button [arrow]="true" ariaLabel="Richiedi un'analisi" (click)="goContact()">Richiedi un'analisi</app-primary-button>
+          </div>
+        </div>
+      </section>
+    </div>
   `,
-  styles: [``]
+  styles: [':host { display: block; }']
 })
 export class SolutionsComponent {
-  private heroSolutionsSignal = signal<Solution[]>([
-    { id: 's1', title: 'Automazione di Linea', description: 'Riduci i tempi di fermo e migliora la qualità con soluzioni end-to-end.', icon: 'settings' },
-    { id: 's2', title: 'Monitoraggio Remoto', description: 'Dashboard in tempo reale e notifiche proattive per interventi rapidi.', icon: 'monitor_heart' }
-  ]);
+  cards: SolutionCard[];
+  rows: SolutionRow[];
 
-  private solutionsSignal = signal<Solution[]>([
-    { id: 's3', title: 'Ottimizzazione Energetica', description: 'Analisi consumi e ottimizzazione per risparmio sui costi energetici.', image: 'https://picsum.photos/seed/s3/800/600' },
-    { id: 's4', title: 'Manutenzione Predittiva', description: 'Algoritmi che prevedono guasti e pianificano interventi prima dei fermi.', image: 'https://picsum.photos/seed/s4/800/600' },
-    { id: 's5', title: 'Integrazione IIoT', description: 'Connessione sicura di macchinari e sensori verso la piattaforma cloud.', image: 'https://picsum.photos/seed/s5/800/600' }
-  ]);
+  constructor(private router: Router, data: DataService) {
+    this.cards = data.getSolutionCards();
+    this.rows = data.getSolutionRows();
+  }
 
-  entriesHero = computed(() => this.heroSolutionsSignal().map((item: Solution, i: number) => ({ item, idx: i, trackId: item.id })));
-  entriesForTemplate = computed(() => this.solutionsSignal().map((item: Solution, i: number) => ({ item, idx: i, trackId: item.id })));
+  d(i: number): string {
+    return 'd' + ((i % 4) + 1);
+  }
 
-  trackByEntry(index: number, entry: { item: Solution; idx: number; trackId: string }) {
-    return entry.trackId;
+  goContact(): void {
+    this.router.navigate(['/contact']);
   }
 }

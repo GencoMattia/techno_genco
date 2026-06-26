@@ -1,74 +1,72 @@
-import { Component, signal, computed, Signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ProductItemComponent } from '../../shared/components/product-item/product-item.component';
-
-interface Product {
-  id: string;
-  title: string;
-  subtitle?: string;
-  description: string;
-  image: string;
-}
+import { PrimaryButtonComponent } from '../../shared/components/buttons/primary-button/primary-button.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { DataService, ProductItem } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ProductItemComponent],
+  imports: [CommonModule, ProductItemComponent, PrimaryButtonComponent, RevealDirective],
   template: `
-    <section class="container mx-auto py-12">
-      <h1 class="text-3xl font-bold mb-8">Prodotti</h1>
+    <div class="page">
+      <!-- Hero -->
+      <section class="sec-sm posrel ohide" style="padding-top:88px">
+        <div class="gridbg" style="opacity:.55"></div>
+        <div class="cont posrel" style="z-index:2">
+          <div class="kick" style="margin-bottom:18px">// Catalogo · 03 unità</div>
+          <h1 class="h1" style="font-size:clamp(40px,5.4vw,66px)">Prodotti</h1>
+          <p class="lead" style="margin-top:22px;max-width:600px">Hardware e sistemi di controllo progettati per l'industria moderna. Affidabili, scalabili, monitorabili in ogni fase.</p>
+        </div>
+      </section>
 
-      <div class="space-y-12">
-        <ng-container *ngFor="let entry of entriesForTemplate(); trackBy: trackByEntry">
-          <app-product-item [title]="entry.item.title" [subtitle]="entry.item.subtitle" [description]="entry.item.description" [image]="entry.item.image" [alt]="entry.item.title" [reverse]="entry.idx % 2 === 1"></app-product-item>
-        </ng-container>
-      </div>
-    </section>
+      <!-- Product rows -->
+      <section class="cont" style="padding-bottom:104px">
+        <div style="display:flex;flex-direction:column;gap:84px">
+          <app-product-item
+            *ngFor="let p of products; let i = index"
+            [code]="p.code"
+            kicker="// Scheda prodotto"
+            [title]="p.title"
+            [subtitle]="p.subtitle"
+            [description]="p.description"
+            [specs]="p.specs"
+            [image]="p.image"
+            [imageCode]="p.code + ' · 4K'"
+            [reverse]="i % 2 === 1"
+            ctaLabel="Richiedi informazioni"
+            ctaVariant="primary"
+            (cta)="goContact()"></app-product-item>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cont" style="padding-bottom:100px">
+        <div class="cta" appReveal style="padding:52px 46px">
+          <div class="gridbg" style="opacity:.5"></div>
+          <div class="posrel fx ac jb" style="z-index:2;flex-wrap:wrap;gap:26px">
+            <div style="max-width:520px">
+              <h2 class="h2" style="font-size:clamp(24px,2.6vw,34px);margin-bottom:10px">Non trovi quello che cerchi?</h2>
+              <p class="tx2" style="font-size:15px">Progettiamo soluzioni su misura per le tue esigenze produttive.</p>
+            </div>
+            <app-primary-button [arrow]="true" ariaLabel="Parliamone" (click)="goContact()">Parliamone</app-primary-button>
+          </div>
+        </div>
+      </section>
+    </div>
   `,
-  styles: [``]
+  styles: [':host { display: block; }']
 })
 export class ProductsComponent {
-  // migrate products to Signals for template-friendly control-flow
-  private productsSignal = signal<Product[]>([
-    {
-      id: 'p1',
-      title: 'Macchina Industriale X1',
-      subtitle: 'Alta efficienza per produzione continua',
-      description: 'La X1 è progettata per operazioni pesanti con consumi ottimizzati e manutenzione semplificata. Ideale per linee produttive moderne.',
-      image: 'https://picsum.photos/seed/p1/800/600'
-    },
-    {
-      id: 'p2',
-      title: 'Sistema di Controllo G2',
-      subtitle: 'Automazione e monitoraggio in tempo reale',
-      description: 'G2 integra sensori intelligenti e dashboard intuitive per il controllo centralizzato degli impianti.',
-      image: 'https://picsum.photos/seed/p2/800/600'
-    },
-    {
-      id: 'p3',
-      title: 'Unità Modulare A3',
-      subtitle: 'Flessibilità e scalabilità',
-      description: 'A3 è una soluzione modulare che permette upgrade progressivi minimizzando i downtime.',
-      image: 'https://picsum.photos/seed/p3/800/600'
-    }
-  ]);
+  products: ProductItem[];
 
-  // expose for template
-  productsForTemplate: Signal<Product[]> = computed(() => this.productsSignal());
-  productIndices: Signal<number[]> = computed(() => this.productsSignal().map((_, i) => i));
-  // entries with stable track id for template iteration
-  entriesForTemplate = computed(() => this.productsSignal().map((item, i) => ({ item, idx: i, trackId: item.id })));
-
-  trackByEntry(index: number, entry: { item: Product; idx: number; trackId: string }) {
-    return entry.trackId;
+  constructor(private router: Router, data: DataService) {
+    this.products = data.getProducts();
   }
 
-  imageColClass(i: number) {
-    // alternate image left/right on md+ screens
-    return i % 2 === 0 ? 'order-1 md:order-1' : 'order-1 md:order-2';
-  }
-
-  textColClass(i: number) {
-    return i % 2 === 0 ? 'order-2 md:order-2' : 'order-2 md:order-1';
+  goContact(): void {
+    this.router.navigate(['/contact']);
   }
 }

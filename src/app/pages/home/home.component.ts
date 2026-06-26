@@ -1,10 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { PrimaryButtonComponent } from '../../shared/components/buttons/primary-button/primary-button.component';
 import { SecondaryButtonComponent } from '../../shared/components/buttons/secondary-button/secondary-button.component';
-import { CardComponent } from '../../shared/components/ui/card/card.component';
-import { CarouselComponent } from '../../shared/components/ui/carousel/carousel.component';
-import { DataService, LocalPhoto } from '../../core/services/data.service';
+import { ServiceCardComponent } from '../../shared/components/service-card/service-card.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import {
+  DataService, ServiceItem, StatItem, FeatureItem, GalleryItem
+} from '../../core/services/data.service';
 
 @Component({
   selector: 'app-home',
@@ -13,37 +16,36 @@ import { DataService, LocalPhoto } from '../../core/services/data.service';
     CommonModule,
     PrimaryButtonComponent,
     SecondaryButtonComponent,
-    CardComponent,
-    CarouselComponent
+    ServiceCardComponent,
+    RevealDirective
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  localPhotos: LocalPhoto[] = [];
-  photosLoading = true;
+export class HomeComponent {
+  services: ServiceItem[];
+  stats: StatItem[];
+  features: FeatureItem[];
+  gallery: GalleryItem[];
+  chipsLoop: string[];
+  aboutImage: string;
 
-  constructor(private dataService: DataService) {}
-
-  ngOnInit() {
-    this.loadLocalPhotos();
+  constructor(private router: Router, data: DataService) {
+    this.services = data.getServices();
+    this.stats = data.getStats();
+    this.features = data.getFeatures();
+    this.gallery = data.getGallery();
+    const chips = data.getChips();
+    this.chipsLoop = [...chips, ...chips]; // duplicated for the seamless -50% marquee loop
+    this.aboutImage = data.getAboutImage();
   }
 
-  ngOnDestroy() {
-    // Cleanup se necessario
+  /** Stagger delay class (d1–d4) cycling per index. */
+  d(i: number): string {
+    return 'd' + ((i % 4) + 1);
   }
 
-  private loadLocalPhotos() {
-    this.photosLoading = true;
-    this.dataService.getLocalPhotos().subscribe({
-      next: (photos) => {
-        this.localPhotos = photos;
-        this.photosLoading = false;
-      },
-      error: (error) => {
-        console.error('Errore caricamento foto:', error);
-        this.photosLoading = false;
-      }
-    });
+  goTo(path: string): void {
+    this.router.navigate([path]);
   }
 }

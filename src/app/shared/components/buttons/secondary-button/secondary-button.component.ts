@@ -1,33 +1,25 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Secondary button — outlined style (`.btn .btns`) from the redesign handoff.
+ */
 @Component({
   selector: 'app-secondary-button',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <button class="secondary-btn" [attr.aria-label]="ariaLabel">
+    <button [type]="type" class="btn btns" [class.btn-sm]="size === 'sm'" [class.btn-block]="block" [attr.aria-label]="ariaLabel">
       <ng-content></ng-content>
+      <span *ngIf="arrow" class="arr">→</span>
     </button>
   `,
-  styles: [
-    `
-    .secondary-btn {
-      background: transparent;
-      color: var(--color-primary-500);
-      padding: 0.45rem 0.9rem;
-      border-radius: 0.375rem;
-      border: 1px solid color-mix(in srgb, var(--color-primary-200) 30%, transparent);
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .12s ease, transform .08s ease, color .12s ease;
-    }
-    .secondary-btn:hover { background: color-mix(in srgb, var(--color-primary-50) 40%, transparent); transform: translateY(-1px); color: var(--color-primary-600); }
-    .secondary-btn:focus { outline: 3px solid color-mix(in srgb, var(--color-primary-200) 30%, white); outline-offset: 2px; }
-    `
-  ]
+  styles: [':host { display: inline-flex; }', ':host(.full) { display: flex; width: 100%; }']
 })
 export class SecondaryButtonComponent {
   @Input() ariaLabel = 'Secondary action';
+  @Input() size: 'sm' | 'md' = 'md';
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+  @Input() arrow = false;
+  @Input() block = false;
 }
-

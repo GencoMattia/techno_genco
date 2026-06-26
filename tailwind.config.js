@@ -43,18 +43,38 @@ module.exports = {
           900: 'var(--color-tertiary-900)'
         },
         accent: {
-          500: 'var(--color-accent-500)'
+          500: 'var(--color-accent-500)',
+          DEFAULT: 'var(--accent)'
         },
         warn: {
           500: 'var(--color-warn-500)'
         },
-        surface: 'var(--color-surface)',
-        bg: 'var(--color-bg)'
+        // ---- Redesign tokens (dark / industrial handoff) ----
+        bg: 'var(--bg)',
+        bg2: 'var(--bg2)',
+        surface: 'var(--surf)',
+        surf: 'var(--surf)',
+        surf2: 'var(--surf2)',
+        line: 'var(--line)',
+        line2: 'var(--line2)',
+        tx: 'var(--tx)',
+        tx2: 'var(--tx2)',
+        tx3: 'var(--tx3)',
+        blue: {
+          DEFAULT: 'var(--blue)',
+          500: 'var(--blue)',
+          600: 'var(--blue2)'
+        }
       }
       ,
       'on': {
         primary: 'var(--color-on-primary)',
         surface: 'var(--color-on-surface)'
+      },
+      fontFamily: {
+        display: ['"Space Grotesk"', 'sans-serif'],
+        body: ['Manrope', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace']
       }
     },
   },
