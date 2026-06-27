@@ -64,22 +64,25 @@ $tertiary-900: #0b3114;
 
 // ============================================================
 // Redesign tokens — "dark / industrial" handoff (Tecnogenco)
-// Mapped 1:1 to the design handoff. These power the dark UI and
-// are exposed as CSS custom properties in `_redesign.scss` (and
-// consumed by `tailwind.config.js` via var(--token)).
+// Palette derivata dal logo aziendale: grafite neutro + rosso
+// del logo (primario) + acciaio/argento (accento). Esposti come
+// CSS custom properties in `_redesign.scss` e consumati da
+// `tailwind.config.js` via var(--token).
+// NB: i nomi `$blue*` / `$accent*` sono ereditati dal redesign
+// precedente ma ora contengono rosso brand e acciaio.
 // ============================================================
-$bg:         #0a0e15; // sfondo pagina
-$bg2:        #0c111a; // sfondo footer, marquee, fasce
-$surf:       #10161f; // superficie card, input
-$surf2:      #141d29; // hover card, gradienti pannello
+$bg:         #0d0d0f; // grafite quasi nero — sfondo pagina
+$bg2:        #111114; // grafite — footer, marquee, fasce
+$surf:       #171719; // superficie card, input
+$surf2:      #1e1f22; // hover card, gradienti pannello
 $line:       rgba(255,255,255,.08); // bordi/divisori sottili
 $line2:      rgba(255,255,255,.14); // bordi più marcati, tag
-$tx:         #e8eef6; // testo primario
-$tx2:        #9aa8ba; // testo secondario / lead
-$tx3:        #5f6f82; // testo terziario / label mono
-$blue:       #3ba0e3; // primario: accenti, link attivi, CTA
-$blue2:      #2a86c8; // gradiente brand mark
-$blueglow:   rgba(59,160,227,.45); // glow/ombre blu
-$accent:     #f4a73a; // unico accento ambra
-$accentglow: rgba(244,167,58,.4);  // glow ambra
+$tx:         #edeef1; // bianco freddo — testo primario
+$tx2:        #9b9ea6; // grigio argento — testo secondario / lead
+$tx3:        #666972; // grigio — testo terziario / label mono
+$blue:       #e2122e; // ROSSO BRAND (primario): accenti, link attivi, CTA
+$blue2:      #b00c22; // rosso profondo — stati/gradienti
+$blueglow:   rgba(226,18,46,.45); // glow rosso — ombre CTA, focus
+$accent:     #bdc0c8; // ACCIAIO (secondario): nodi schema, dettagli metallici
+$accentglow: rgba(189,192,200,.32);  // glow acciaio
 
